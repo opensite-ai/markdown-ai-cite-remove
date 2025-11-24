@@ -6,6 +6,7 @@ pub(crate) struct Patterns {
     pub inline_numeric: Regex,
     pub inline_named: Regex,
     pub reference_link: Regex,
+    pub reference_link_markdown: Regex, // NEW: [1](url) format
     pub reference_header: Regex,
     pub reference_entry: Regex,
     pub multiple_whitespace: Regex,
@@ -25,6 +26,10 @@ pub(crate) static PATTERNS: Lazy<Patterns> = Lazy::new(|| Patterns {
     // Link-style references: [1]: https://... or [1] https://...
     // Matches both [1]: and [1] (space) formats
     reference_link: Regex::new(r"(?m)^\[\d+\](?::\s*|\s+).*$").unwrap(),
+
+    // Markdown-style citation links: [1](https://...)
+    // This is the Perplexity format where citations look like markdown links
+    reference_link_markdown: Regex::new(r"(?m)^\[\d+\]\(https?://[^\)]+\)$").unwrap(),
 
     // Reference section headers
     reference_header: Regex::new(

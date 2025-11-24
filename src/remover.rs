@@ -100,8 +100,9 @@ impl CitationRemover {
                 break;
             }
 
-            // Check for reference link or entry
+            // Check for reference link, markdown-style link, or entry
             if self.patterns.reference_link.is_match(line)
+                || self.patterns.reference_link_markdown.is_match(line)
                 || self.patterns.reference_entry.is_match(line)
             {
                 references_start = Some(i);
