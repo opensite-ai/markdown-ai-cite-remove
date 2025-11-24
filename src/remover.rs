@@ -60,28 +60,18 @@ impl CitationRemover {
         result
     }
 
-    /// Remove inline citations: [1][2][source:3]
+    /// Remove ALL inline citations using comprehensive pattern matching
+    /// Handles: `[1]`, `[^1]`, `[^1_1]`, `[source:1]`, `[@smith2004]`, `@citation`
     fn remove_inline_citations(&self, text: &str) -> String {
-        let mut result = text.to_string();
-
-        // Remove numeric citations [1][2]
-        result = self
-            .patterns
-            .inline_numeric
-            .replace_all(&result, "")
-            .to_string();
-
-        // Remove named citations [source:1][ref:2]
-        result = self
-            .patterns
-            .inline_named
-            .replace_all(&result, "")
-            .to_string();
-
-        result
+        // Use the unified comprehensive pattern that matches ALL citation formats
+        self.patterns
+            .inline_citations
+            .replace_all(text, "")
+            .to_string()
     }
 
     /// Remove reference sections at end of document
+    /// Handles: `[1]: url`, `[^1]: text`, `[^1_1]: url`, `[1](url)`, `[^1_1](url)`
     fn remove_reference_sections(&self, text: &str) -> String {
         let lines: Vec<&str> = text.lines().collect();
         let mut references_start = None;
@@ -100,9 +90,8 @@ impl CitationRemover {
                 break;
             }
 
-            // Check for reference link, markdown-style link, or entry
-            if self.patterns.reference_link.is_match(line)
-                || self.patterns.reference_link_markdown.is_match(line)
+            // Check for ANY reference definition format using comprehensive pattern
+            if self.patterns.reference_definitions.is_match(line)
                 || self.patterns.reference_entry.is_match(line)
             {
                 references_start = Some(i);

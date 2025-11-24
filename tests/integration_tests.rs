@@ -341,6 +341,82 @@ fn test_perplexity_fixture_complete_validation() {
 }
 
 #[test]
+fn test_perplexity_export_syntax_fixture_complete_validation() {
+    let input = include_str!("fixtures/perplexity_export_syntax.md");
+    let cleaned = remove_citations(input);
+
+    // 1. Verify ALL footnote-style inline citations are removed (uses [^1_1] through [^2_21])
+    // Test a sample of them
+    for citation in [
+        "[^1_1]", "[^1_5]", "[^1_10]", "[^1_20]", "[^1_30]", "[^1_56]", "[^2_1]", "[^2_10]",
+        "[^2_21]",
+    ] {
+        assert!(
+            !cleaned.contains(citation),
+            "Inline citation {} should be removed",
+            citation
+        );
+    }
+
+    // 2. Verify ALL footnote reference definitions at the end are removed
+    assert!(
+        !cleaned.contains("[^1_1]: https://mackeeper.com"),
+        "Reference definition [^1_1] should be removed"
+    );
+    assert!(
+        !cleaned.contains("[^1_56]: https://www.macworld.com"),
+        "Reference definition [^1_56] should be removed"
+    );
+    assert!(
+        !cleaned.contains("[^2_21]: https://www.youtube.com"),
+        "Reference definition [^2_21] should be removed"
+    );
+
+    // 3. Verify no [^number_number]: url patterns remain
+    let footnote_ref_pattern = regex::Regex::new(r"\[\^\d+_\d+\]:\s*https?://").unwrap();
+    let matches: Vec<_> = footnote_ref_pattern.find_iter(&cleaned).collect();
+    assert!(
+        matches.is_empty(),
+        "No [^number_number]: url patterns should remain. Found {} matches",
+        matches.len()
+    );
+
+    // 4. Verify no inline footnote citations remain
+    let footnote_inline_pattern = regex::Regex::new(r"\[\^\d+_\d+\]").unwrap();
+    let matches: Vec<_> = footnote_inline_pattern.find_iter(&cleaned).collect();
+    assert!(
+        matches.is_empty(),
+        "No [^number_number] inline citations should remain. Found {} matches",
+        matches.len()
+    );
+
+    // 5. Verify content is preserved
+    assert!(
+        cleaned.contains("Your scratch disk is getting full"),
+        "Main content should be preserved"
+    );
+    assert!(
+        cleaned.contains("DaisyDisk"),
+        "Tool names should be preserved"
+    );
+    assert!(
+        cleaned.contains("OmniDiskSweeper"),
+        "Content should be preserved"
+    );
+
+    // 6. Verify the file ends cleanly without the reference list
+    let trimmed = cleaned.trim_end();
+    assert!(
+        !trimmed.contains("[^2_21]: https://www.youtube.com"),
+        "File should not end with reference definitions"
+    );
+    assert!(
+        !trimmed.contains("https://www.youtube.com/watch?v=roTArTNov9g"),
+        "Last reference URL should be removed"
+    );
+}
+
+#[test]
 fn test_citations_at_start_of_line() {
     let input = "[1] This starts with a citation.";
     // Note: When citation is at start, it's removed but may leave the space
