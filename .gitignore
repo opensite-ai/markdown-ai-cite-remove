@@ -1,0 +1,198 @@
+# ============================================================================
+# Rust Crate .gitignore - markdown-ai-cite-remove
+# ============================================================================
+# This gitignore follows Rust community best practices for library crates
+# that will be published to crates.io
+# ============================================================================
+
+# -----------------------------------------------------------------------------
+# CARGO BUILD ARTIFACTS (REQUIRED)
+# -----------------------------------------------------------------------------
+# The /target directory contains all compiled artifacts and should NEVER
+# be committed. Cargo will recreate this on every build.
+/target/
+
+# Cargo.lock is intentionally EXCLUDED from .gitignore for library crates
+# Rationale: Libraries should NOT commit Cargo.lock (only binaries should)
+# See: https://doc.rust-lang.org/cargo/faq.html#why-do-binaries-have-cargolock-in-version-control-but-not-libraries
+# Since this is a library crate, Cargo.lock should be in .gitignore:
+Cargo.lock
+
+# Note: If you add a CLI binary (bin/cli.rs), consider removing Cargo.lock
+# from gitignore to ensure reproducible builds for end users
+
+
+# -----------------------------------------------------------------------------
+# CARGO PACKAGE ARTIFACTS
+# -----------------------------------------------------------------------------
+# Generated when running `cargo package` or `cargo publish --dry-run`
+# These are temporary and should not be committed
+/target/package/
+*.crate
+
+# Backup files created by cargo when editing Cargo.toml
+**/*.rs.bk
+Cargo.toml.orig
+
+
+# -----------------------------------------------------------------------------
+# RUST ANALYZER / IDE ARTIFACTS
+# -----------------------------------------------------------------------------
+# Rust-analyzer (VS Code, IntelliJ, etc.) generates this for code analysis
+rust-project.json
+
+# IntelliJ / CLion / RustRover
+.idea/
+*.iml
+*.iws
+*.ipr
+.idea_modules/
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Fleet (JetBrains Fleet)
+.fleet/
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim/Neovim
+*.swp
+*.swo
+*~
+.vim/
+Session.vim
+.netrwhist
+
+# Emacs
+*~
+\#*\#
+.\#*
+.dir-locals.el
+
+
+# -----------------------------------------------------------------------------
+# OS-SPECIFIC FILES
+# -----------------------------------------------------------------------------
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+.directory
+.Trash-*
+
+
+# -----------------------------------------------------------------------------
+# TESTING & COVERAGE
+# -----------------------------------------------------------------------------
+# Coverage reports (tarpaulin, kcov, etc.)
+/coverage/
+*.profraw
+*.profdata
+lcov.info
+cobertura.xml
+
+# Benchmark results
+/target/criterion/
+
+
+# -----------------------------------------------------------------------------
+# DOCUMENTATION
+# -----------------------------------------------------------------------------
+# Generated docs (can be rebuilt with `cargo doc`)
+# However, some projects commit docs/ for GitHub Pages
+# Uncomment the next line if you want to ignore generated docs:
+# /target/doc/
+
+
+# -----------------------------------------------------------------------------
+# SECURITY & CREDENTIALS (CRITICAL)
+# -----------------------------------------------------------------------------
+# NEVER commit these - they contain sensitive information
+.cargo/credentials.toml
+.cargo/credentials
+.env
+.env.local
+*.pem
+*.key
+*.p12
+
+
+# -----------------------------------------------------------------------------
+# TEMPORARY & CACHE FILES
+# -----------------------------------------------------------------------------
+# Temporary files from various tools
+*.tmp
+*.temp
+*.log
+.cache/
+
+# Rust incremental compilation cache (safe to ignore, speeds up rebuilds)
+# Note: This is already inside /target/ but explicitly listing for clarity
+/target/debug/incremental/
+/target/release/incremental/
+
+
+# -----------------------------------------------------------------------------
+# PROJECT-SPECIFIC (OPTIONAL)
+# -----------------------------------------------------------------------------
+# Add any project-specific ignores below this line
+
+# Examples directory outputs (if you have example programs that generate files)
+# /examples/output/
+
+# Test fixtures that are generated (not the fixtures themselves)
+# /tests/fixtures/generated/
+
+# Local development scripts
+# /scripts/local/
+
+# Draft documentation or notes
+# /docs/drafts/
+
+
+# ============================================================================
+# WHAT SHOULD BE COMMITTED (FOR REFERENCE)
+# ============================================================================
+# ✅ Source code (src/, tests/, benches/, examples/)
+# ✅ Cargo.toml (REQUIRED for publishing)
+# ✅ Cargo.lock (ONLY if this becomes a binary crate with CLI)
+# ✅ README.md (REQUIRED for crates.io)
+# ✅ LICENSE or LICENSE-MIT / LICENSE-APACHE (REQUIRED for publishing)
+# ✅ Build scripts (build.rs)
+# ✅ Test fixtures (tests/fixtures/*.md)
+# ✅ Documentation (docs/ if you maintain it manually)
+# ✅ CI/CD configuration (.github/workflows/)
+# ✅ Changelog (CHANGELOG.md)
+# ✅ .gitignore (this file)
+# ============================================================================
+
+# ============================================================================
+# PUBLISHING TO CRATES.IO - WHAT GETS INCLUDED
+# ============================================================================
+# When you run `cargo publish`, Cargo automatically:
+# 1. Respects this .gitignore file (most patterns)
+# 2. Excludes version control directories (.git/)
+# 3. Excludes /target/
+# 4. Includes ONLY tracked files in git (if repo is initialized)
+#
+# To verify what will be published, run:
+#   cargo package --list
+#
+# To test publishing without actually uploading:
+#   cargo publish --dry-run
+#
+# The generated .crate file will be in: target/package/
+# ============================================================================
