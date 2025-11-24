@@ -1,6 +1,6 @@
 # CLI Usage Guide
 
-Complete guide for using the `md-cite-clean` command-line tool.
+Complete guide for using the `md-cite-remove` command-line tool.
 
 ## Installation
 
@@ -22,16 +22,16 @@ cargo install --path . --features cli
 
 # Option 3: Build without installing
 cargo build --release --features cli
-# Binary will be at: target/release/md-cite-clean
+# Binary will be at: target/release/md-cite-remove
 ```
 
 ### Verify Installation
 
 ```bash
-md-cite-clean --version
-# Should output: md-cite-clean 0.1.0
+md-cite-remove --version
+# Should output: md-cite-remove 0.1.0
 
-md-cite-clean --help
+md-cite-remove --help
 # Shows usage information
 ```
 
@@ -55,25 +55,25 @@ Perfect for piping and command chaining:
 
 ```bash
 # Simple pipe
-echo "Text[1] with citations[2]." | md-cite-clean
+echo "Text[1] with citations[2]." | md-cite-remove
 # Output: Text with citations.
 
 # From file to stdout
-cat document.md | md-cite-clean
+cat document.md | md-cite-remove
 
 # Chain with other commands
-cat document.md | md-cite-clean | wc -w
+cat document.md | md-cite-remove | wc -w
 ```
 
 ### 2. Process a File
 
 ```bash
 # Read file, output to stdout
-md-cite-clean document.md
+md-cite-remove document.md
 
 # Read file, save to another file
-md-cite-clean input.md -o output.md
-md-cite-clean input.md --output output.md  # Long form
+md-cite-remove input.md -o output.md
+md-cite-remove input.md --output output.md  # Long form
 ```
 
 ### 3. Verbose Mode
@@ -81,7 +81,7 @@ md-cite-clean input.md --output output.md  # Long form
 See what's happening:
 
 ```bash
-md-cite-clean input.md -o output.md --verbose
+md-cite-remove input.md -o output.md --verbose
 # Output:
 # Reading from file: input.md
 # Cleaning markdown (input size: 1234 bytes)...
@@ -99,17 +99,17 @@ md-cite-clean input.md -o output.md --verbose
 ```bash
 # Using a for loop
 for file in *.md; do
-  md-cite-clean "$file" -o "cleaned_${file}"
+  md-cite-remove "$file" -o "cleaned_${file}"
 done
 
 # Using find
-find . -name "*.md" -exec md-cite-clean {} -o {}.clean \;
+find . -name "*.md" -exec md-cite-remove {} -o {}.clean \;
 
 # Process and preserve directory structure
 find ./input -name "*.md" | while read file; do
   output="${file/input/output}"
   mkdir -p "$(dirname "$output")"
-  md-cite-clean "$file" -o "$output"
+  md-cite-remove "$file" -o "$output"
 done
 ```
 
@@ -117,7 +117,7 @@ done
 
 ```bash
 #!/bin/bash
-# clean_all.sh - Clean all markdown files
+# clean_all.sh - Remove citations from all markdown files
 
 INPUT_DIR="./ai_output"
 OUTPUT_DIR="./cleaned"
@@ -128,7 +128,7 @@ count=0
 for file in "$INPUT_DIR"/*.md; do
   if [ -f "$file" ]; then
     filename=$(basename "$file")
-    md-cite-clean "$file" -o "$OUTPUT_DIR/$filename" --verbose
+    md-cite-remove "$file" -o "$OUTPUT_DIR/$filename" --verbose
     ((count++))
   fi
 done
@@ -141,42 +141,42 @@ echo "Processed $count files"
 **1. With Pandoc (convert to HTML/PDF):**
 
 ```bash
-# Clean and convert to HTML
-md-cite-clean input.md | pandoc -f markdown -t html -o output.html
+# Remove citations from and convert to HTML
+md-cite-remove input.md | pandoc -f markdown -t html -o output.html
 
-# Clean and convert to PDF
-md-cite-clean input.md | pandoc -f markdown -o output.pdf
+# Remove citations from and convert to PDF
+md-cite-remove input.md | pandoc -f markdown -o output.pdf
 ```
 
 **2. With curl (process API responses):**
 
 ```bash
-# Clean AI API response
-curl -s https://api.example.com/ai-response | md-cite-clean
+# Remove citations from AI API response
+curl -s https://api.example.com/ai-response | md-cite-remove
 
 # Save cleaned response
-curl -s https://api.example.com/ai-response | md-cite-clean > cleaned.md
+curl -s https://api.example.com/ai-response | md-cite-remove > cleaned.md
 ```
 
 **3. With grep/sed (text processing):**
 
 ```bash
-# Clean and search
-md-cite-clean document.md | grep "important"
+# Remove citations from and search
+md-cite-remove document.md | grep "important"
 
-# Clean and count lines
-md-cite-clean document.md | wc -l
+# Remove citations from and count lines
+md-cite-remove document.md | wc -l
 
-# Clean and preview
-md-cite-clean document.md | less
+# Remove citations from and preview
+md-cite-remove document.md | less
 ```
 
 **4. With git (version control):**
 
 ```bash
-# Clean all changed markdown files
+# Remove citations from all changed markdown files
 git diff --name-only | grep '\.md$' | while read file; do
-  md-cite-clean "$file" -o "$file.tmp" && mv "$file.tmp" "$file"
+  md-cite-remove "$file" -o "$file.tmp" && mv "$file.tmp" "$file"
 done
 ```
 
@@ -197,7 +197,7 @@ mkdir -p "$OUTPUT_DIR"
 fswatch -0 "$INPUT_DIR" | while read -d "" event; do
   if [[ "$event" == *.md ]]; then
     filename=$(basename "$event")
-    md-cite-clean "$event" -o "$OUTPUT_DIR/$filename" --verbose
+    md-cite-remove "$event" -o "$OUTPUT_DIR/$filename" --verbose
   fi
 done
 ```
@@ -206,11 +206,11 @@ done
 
 ```bash
 #!/bin/bash
-# .git/hooks/pre-commit - Clean markdown before commit
+# .git/hooks/pre-commit - Remove citations from markdown before commit
 
 for file in $(git diff --cached --name-only | grep '\.md$'); do
   if [ -f "$file" ]; then
-    md-cite-clean "$file" -o "$file.tmp"
+    md-cite-remove "$file" -o "$file.tmp"
     mv "$file.tmp" "$file"
     git add "$file"
   fi
@@ -221,7 +221,7 @@ done
 
 ```yaml
 # .github/workflows/clean-docs.yml
-name: Clean Documentation
+name: Remove citations from Documentation
 
 on:
   push:
@@ -239,13 +239,13 @@ jobs:
         with:
           toolchain: stable
       
-      - name: Install md-cite-clean
+      - name: Install md-cite-remove
         run: cargo install markdown-ai-cite-remove --features cli
       
-      - name: Clean markdown files
+      - name: Remove citations from markdown files
         run: |
           find docs -name "*.md" | while read file; do
-            md-cite-clean "$file" -o "$file.tmp"
+            md-cite-remove "$file" -o "$file.tmp"
             mv "$file.tmp" "$file"
           done
       
@@ -254,7 +254,7 @@ jobs:
           git config user.name "Bot"
           git config user.email "bot@example.com"
           git add docs/
-          git commit -m "Clean citations from docs" || true
+          git commit -m "Remove citations from citations from docs" || true
           git push
 ```
 
@@ -263,26 +263,26 @@ jobs:
 ### 1. Blog Publishing
 
 ```bash
-# Clean AI-generated blog post
-md-cite-clean ai_draft.md -o blog_post.md
+# Remove citations from AI-generated blog post
+md-cite-remove ai_draft.md -o blog_post.md
 
-# Clean and publish
-md-cite-clean ai_draft.md | ./publish_to_cms.sh
+# Remove citations from and publish
+md-cite-remove ai_draft.md | ./publish_to_cms.sh
 ```
 
 ### 2. Documentation Generation
 
 ```bash
-# Clean AI-generated docs
-md-cite-clean ai_docs.md -o README.md --verbose
+# Remove citations from AI-generated docs
+md-cite-remove ai_docs.md -o README.md --verbose
 ```
 
 ### 3. Content Aggregation
 
 ```bash
-# Clean multiple AI responses
+# Remove citations from multiple AI responses
 for source in chatgpt claude perplexity; do
-  md-cite-clean "${source}_response.md" -o "cleaned_${source}.md"
+  md-cite-remove "${source}_response.md" -o "cleaned_${source}.md"
 done
 
 # Combine cleaned responses
@@ -292,8 +292,8 @@ cat cleaned_*.md > combined.md
 ### 4. Research Paper Cleanup
 
 ```bash
-# Clean research summary
-md-cite-clean research_summary.md -o clean_summary.md
+# Remove citations from research summary
+md-cite-remove research_summary.md -o clean_summary.md
 
 # Verify citations removed
 diff research_summary.md clean_summary.md
@@ -305,17 +305,17 @@ diff research_summary.md clean_summary.md
 
 ```bash
 # Process large files efficiently (already optimized)
-md-cite-clean large_file.md -o output.md
+md-cite-remove large_file.md -o output.md
 
 # Batch process with parallel (if installed)
-ls *.md | parallel md-cite-clean {} -o cleaned_{}
+ls *.md | parallel md-cite-remove {} -o cleaned_{}
 ```
 
 ### Debugging
 
 ```bash
 # See what changed
-md-cite-clean input.md -o output.md --verbose
+md-cite-remove input.md -o output.md --verbose
 diff input.md output.md
 
 # Check file sizes
@@ -326,7 +326,7 @@ ls -lh input.md output.md
 
 ```bash
 # Ensure no citations remain
-if md-cite-clean input.md | grep -q '\[[0-9]\+\]'; then
+if md-cite-remove input.md | grep -q '\[[0-9]\+\]'; then
   echo "Warning: Citations still present!"
 else
   echo "All citations removed successfully"
@@ -340,7 +340,7 @@ fi
 **Solution:**
 ```bash
 # Check if installed
-which md-cite-clean
+which md-cite-remove
 
 # If not found, add to PATH
 export PATH="$HOME/.cargo/bin:$PATH"
@@ -351,7 +351,7 @@ export PATH="$HOME/.cargo/bin:$PATH"
 **Solution:**
 ```bash
 # Make binary executable
-chmod +x ~/.cargo/bin/md-cite-clean
+chmod +x ~/.cargo/bin/md-cite-remove
 
 # Or reinstall
 cargo install --path . --features cli --force
@@ -362,21 +362,21 @@ cargo install --path . --features cli --force
 **Solution:**
 ```bash
 # Use temporary file
-md-cite-clean input.md -o input.md.tmp
+md-cite-remove input.md -o input.md.tmp
 mv input.md.tmp input.md
 
 # Or use in-place script
-md-cite-clean input.md -o temp && mv temp input.md
+md-cite-remove input.md -o temp && mv temp input.md
 ```
 
 ## Getting Help
 
 ```bash
 # Show help
-md-cite-clean --help
+md-cite-remove --help
 
 # Show version
-md-cite-clean --version
+md-cite-remove --version
 ```
 
 For more information, see the main [README.md](../../README.md) or [BENCHMARKING.md](../performance/BENCHMARKING.md).

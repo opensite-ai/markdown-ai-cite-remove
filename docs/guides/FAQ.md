@@ -28,7 +28,7 @@ cd markdown-ai-cite-remove
 cargo install --path . --features cli
 ```
 
-### Q: The `md-cite-clean` command isn't found after installation
+### Q: The `md-cite-remove` command isn't found after installation
 
 **A:** Add Cargo's bin directory to your PATH:
 
@@ -125,14 +125,14 @@ The reports include:
 **A:** Use a temporary file:
 
 ```bash
-md-cite-clean input.md -o temp.md && mv temp.md input.md
+md-cite-remove input.md -o temp.md && mv temp.md input.md
 ```
 
 Or in a script:
 ```bash
 #!/bin/bash
 for file in *.md; do
-  md-cite-clean "$file" -o "$file.tmp"
+  md-cite-remove "$file" -o "$file.tmp"
   mv "$file.tmp" "$file"
 done
 ```
@@ -144,14 +144,14 @@ done
 ```bash
 # Loop
 for file in *.md; do
-  md-cite-clean "$file" -o "cleaned_${file}"
+  md-cite-remove "$file" -o "cleaned_${file}"
 done
 
 # Find
-find . -name "*.md" -exec md-cite-clean {} -o {}.clean \;
+find . -name "*.md" -exec md-cite-remove {} -o {}.clean \;
 
 # Parallel (if installed)
-ls *.md | parallel md-cite-clean {} -o cleaned_{}
+ls *.md | parallel md-cite-remove {} -o cleaned_{}
 ```
 
 See [CLI_GUIDE.md](CLI_GUIDE.md) (this file) for more examples.
@@ -162,13 +162,13 @@ See [CLI_GUIDE.md](CLI_GUIDE.md) (this file) for more examples.
 
 ```bash
 # From stdin
-echo "Text[1] here." | md-cite-clean
+echo "Text[1] here." | md-cite-remove
 
 # Pipe from file
-cat document.md | md-cite-clean
+cat document.md | md-cite-remove
 
 # Chain commands
-cat document.md | md-cite-clean | pandoc -f markdown -t html
+cat document.md | md-cite-remove | pandoc -f markdown -t html
 ```
 
 ### Q: How do I verify citations were removed?
@@ -176,7 +176,7 @@ cat document.md | md-cite-clean | pandoc -f markdown -t html
 **A:** Use verbose mode:
 
 ```bash
-md-cite-clean input.md -o output.md --verbose
+md-cite-remove input.md -o output.md --verbose
 ```
 
 This shows input/output sizes. Or compare files:
@@ -199,7 +199,7 @@ Then in your code:
 ```rust
 use markdown_ai_cite_remove::clean;
 
-let cleaned = clean("Text[1] here.");
+let result = remove_citations("Text[1] here.");
 ```
 
 ### Q: Can I customize what gets removed?
@@ -207,15 +207,15 @@ let cleaned = clean("Text[1] here.");
 **A:** Yes, use custom configuration:
 
 ```rust
-use markdown_ai_cite_remove::{CitationCleaner, CleanerConfig};
+use markdown_ai_cite_remove::{CitationRemover, RemoverConfig};
 
 // Remove only inline citations
-let config = CleanerConfig::inline_only();
-let cleaner = CitationCleaner::with_config(config);
-let cleaned = cleaner.clean("Text[1].\n\n[1]: https://example.com");
+let config = RemoverConfig::inline_only();
+let remover = CitationRemover::with_config(config);
+let result = cleaner.remove_citations("Text[1].\n\n[1]: https://example.com");
 
 // Custom configuration
-let config = CleanerConfig {
+let config = RemoverConfig {
     remove_inline_citations: true,
     remove_reference_links: false,
     // ... other options
@@ -229,14 +229,14 @@ let config = CleanerConfig {
 
 ```rust
 use std::sync::Arc;
-use markdown_ai_cite_remove::CitationCleaner;
+use markdown_ai_cite_remove::CitationRemover;
 
-let cleaner = Arc::new(CitationCleaner::new());
+let remover = Arc::new(CitationRemover::new());
 
 // Use in multiple threads
 let cleaner_clone = cleaner.clone();
 std::thread::spawn(move || {
-    let cleaned = cleaner_clone.clean("Text[1]");
+    let result = cleaner_clone.remove_citations("Text[1]");
 });
 ```
 
@@ -245,10 +245,10 @@ std::thread::spawn(move || {
 **A:** Yes, and it's recommended for batch processing:
 
 ```rust
-let cleaner = CitationCleaner::new();
+let remover = CitationRemover::new();
 
 for document in documents {
-    let cleaned = cleaner.clean(&document);
+    let result = cleaner.remove_citations(&document);
     // Process cleaned document...
 }
 ```
@@ -265,7 +265,7 @@ for document in documents {
 
 ### Q: Does it allocate memory?
 
-**A:** Minimal allocations. The regex patterns are compiled once and reused. Each cleaning operation allocates only for the output string.
+**A:** Minimal allocations. The regex patterns are compiled once and reused. Each removing citations operation allocates only for the output string.
 
 ### Q: Can it handle large files?
 
@@ -390,7 +390,7 @@ cargo doc --open
 fn test_my_new_case() {
     let input = "Your test input[1]";
     let expected = "Your expected output";
-    assert_eq!(clean(input), expected);
+    assert_eq!(remove_citations(input), expected);
 }
 ```
 

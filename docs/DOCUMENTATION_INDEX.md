@@ -26,7 +26,7 @@ Contains:
 ## 🎯 Specialized Guides
 
 ### [CLI_GUIDE.md](guides/CLI_GUIDE.md) - Command-Line Tool
-**Complete guide for using the `md-cite-clean` CLI tool.**
+**Complete guide for using the `md-cite-remove` CLI tool.**
 
 Contains:
 - Prerequisites and installation steps
