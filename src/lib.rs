@@ -2,18 +2,18 @@
 //!
 //! **Remove AI-generated citations and annotations from Markdown text**
 //!
-//! High-performance Rust library for cleaning ChatGPT, Claude, Perplexity, and other AI markdown
+//! High-performance Rust library for removing citations from ChatGPT, Claude, Perplexity, and other AI markdown
 //! responses. Removes inline citations `[1][2]`, reference links `[1]: https://...`, and
 //! bibliography sections with 100% accuracy.
 //!
 //! ## Quick Start
 //!
 //! ```
-//! use markdown_ai_cite_remove::clean;
+//! use markdown_ai_cite_remove::remove_citations;
 //!
 //! let markdown = "AI research shows promise[1][2].\n\n[1]: https://example.com\n[2]: https://test.com";
-//! let cleaned = clean(markdown);
-//! assert_eq!(cleaned.trim(), "AI research shows promise.");
+//! let result = remove_citations(markdown);
+//! assert_eq!(result.trim(), "AI research shows promise.");
 //! ```
 //!
 //! ## Features
@@ -30,56 +30,56 @@
 //! ## Custom Configuration
 //!
 //! ```
-//! use markdown_ai_cite_remove::{CitationCleaner, CleanerConfig};
+//! use markdown_ai_cite_remove::{CitationRemover, RemoverConfig};
 //!
-//! let config = CleanerConfig {
+//! let config = RemoverConfig {
 //!     remove_inline_citations: true,
 //!     remove_reference_links: true,
 //!     ..Default::default()
 //! };
 //!
-//! let cleaner = CitationCleaner::with_config(config);
-//! let cleaned = cleaner.clean("Text with citations[1].");
+//! let remover = CitationRemover::with_config(config);
+//! let result = remover.remove("Text with citations[1].");
 //! ```
 
-mod cleaner;
 mod config;
 mod error;
 mod patterns;
+mod remover;
 
-pub use cleaner::CitationCleaner;
-pub use config::{CleanerConfig, RemovalMode};
-pub use error::{CleanerError, Result};
+pub use config::{RemovalMode, RemoverConfig};
+pub use error::{RemoverError, Result};
+pub use remover::CitationRemover;
 
-/// Main entry point - clean markdown with default settings
+/// Main entry point - remove citations from markdown with default settings
 ///
 /// # Examples
 ///
 /// ```
-/// use markdown_ai_cite_remove::clean;
+/// use markdown_ai_cite_remove::remove_citations;
 ///
 /// let input = "Recent research[1][2] shows promise[3].";
-/// let output = clean(input);
+/// let output = remove_citations(input);
 /// assert_eq!(output, "Recent research shows promise.");
 /// ```
-pub fn clean(markdown: &str) -> String {
-    CitationCleaner::new().clean(markdown)
+pub fn remove_citations(markdown: &str) -> String {
+    CitationRemover::new().remove(markdown)
 }
 
-/// Clean markdown with custom configuration
+/// Remove citations from markdown with custom configuration
 ///
 /// # Examples
 ///
 /// ```
-/// use markdown_ai_cite_remove::{clean_with_config, CleanerConfig};
+/// use markdown_ai_cite_remove::{remove_citations_with_config, RemoverConfig};
 ///
-/// let config = CleanerConfig::inline_only();
+/// let config = RemoverConfig::inline_only();
 /// let input = "Text[1] here.\n\nSome content.";
-/// let output = clean_with_config(input, config);
+/// let output = remove_citations_with_config(input, config);
 /// assert_eq!(output.trim(), "Text here.\n\nSome content.");
 /// ```
-pub fn clean_with_config(markdown: &str, config: CleanerConfig) -> String {
-    CitationCleaner::with_config(config).clean(markdown)
+pub fn remove_citations_with_config(markdown: &str, config: RemoverConfig) -> String {
+    CitationRemover::with_config(config).remove(markdown)
 }
 
 #[cfg(test)]
@@ -87,35 +87,35 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_clean_basic() {
+    fn test_remove_basic() {
         let input = "Text[1] here[2].";
         let expected = "Text here.";
-        assert_eq!(clean(input), expected);
+        assert_eq!(remove_citations(input), expected);
     }
 
     #[test]
-    fn test_clean_with_references() {
+    fn test_remove_with_references() {
         let input = "Content here.\n\n[1]: https://example.com\n[2]: https://test.com";
         let expected = "Content here.";
-        assert_eq!(clean(input).trim(), expected);
+        assert_eq!(remove_citations(input).trim(), expected);
     }
 
     #[test]
-    fn test_clean_preserves_markdown() {
+    fn test_remove_preserves_markdown() {
         let input =
             "# Heading\n\nSome **bold** text[1] and *italic*[2].\n\n[1]: https://example.com";
         let expected = "# Heading\n\nSome **bold** text and *italic*.";
-        assert_eq!(clean(input).trim(), expected);
+        assert_eq!(remove_citations(input).trim(), expected);
     }
 
     #[test]
     fn test_empty_string() {
-        assert_eq!(clean(""), "");
+        assert_eq!(remove_citations(""), "");
     }
 
     #[test]
     fn test_no_citations() {
         let input = "Just regular markdown text.";
-        assert_eq!(clean(input), input);
+        assert_eq!(remove_citations(input), input);
     }
 }

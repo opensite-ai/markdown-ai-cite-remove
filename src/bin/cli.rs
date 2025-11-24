@@ -1,10 +1,10 @@
 use clap::Parser;
-use markdown_ai_cite_remove::clean;
+use markdown_ai_cite_remove::remove_citations;
 use std::fs;
 use std::io::{self, Read, Write};
 
 #[derive(Parser)]
-#[command(name = "md-cite-clean")]
+#[command(name = "md-cite-remove")]
 #[command(version, about = "Remove citations from AI-generated markdown", long_about = None)]
 struct Cli {
     /// Input file (or stdin if not specified)
@@ -40,14 +40,14 @@ fn main() -> io::Result<()> {
         }
     };
 
-    // Clean markdown
+    // Remove citations
     if cli.verbose {
-        eprintln!("Cleaning markdown (input size: {} bytes)...", input.len());
+        eprintln!("Removing citations (input size: {} bytes)...", input.len());
     }
-    let cleaned = clean(&input);
+    let result = remove_citations(&input);
 
     if cli.verbose {
-        eprintln!("Cleaned markdown (output size: {} bytes)", cleaned.len());
+        eprintln!("Citations removed (output size: {} bytes)", result.len());
     }
 
     // Write output
@@ -56,9 +56,9 @@ fn main() -> io::Result<()> {
             if cli.verbose {
                 eprintln!("Writing to file: {}", path);
             }
-            fs::write(path, cleaned)?
+            fs::write(path, result)?
         }
-        None => io::stdout().write_all(cleaned.as_bytes())?,
+        None => io::stdout().write_all(result.as_bytes())?,
     }
 
     if cli.verbose {

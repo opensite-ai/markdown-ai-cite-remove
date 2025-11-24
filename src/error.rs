@@ -1,9 +1,9 @@
 use thiserror::Error;
 
-pub type Result<T> = std::result::Result<T, CleanerError>;
+pub type Result<T> = std::result::Result<T, RemoverError>;
 
 #[derive(Error, Debug)]
-pub enum CleanerError {
+pub enum RemoverError {
     #[error("Invalid regex pattern: {0}")]
     InvalidPattern(String),
 

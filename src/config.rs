@@ -1,6 +1,6 @@
 /// Configuration options for citation removal
 #[derive(Debug, Clone)]
-pub struct CleanerConfig {
+pub struct RemoverConfig {
     /// Remove inline citations like [1][2]
     pub remove_inline_citations: bool,
 
@@ -23,7 +23,7 @@ pub struct CleanerConfig {
     pub trim_lines: bool,
 }
 
-impl Default for CleanerConfig {
+impl Default for RemoverConfig {
     fn default() -> Self {
         Self {
             remove_inline_citations: true,
@@ -37,7 +37,7 @@ impl Default for CleanerConfig {
     }
 }
 
-impl CleanerConfig {
+impl RemoverConfig {
     /// Create a new configuration with all features enabled
     pub fn new() -> Self {
         Self::default()

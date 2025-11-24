@@ -1,5 +1,5 @@
 use criterion::{black_box, criterion_group, criterion_main, Criterion, Throughput};
-use markdown_ai_cite_remove::{clean, CitationCleaner};
+use markdown_ai_cite_remove::{remove_citations, CitationRemover};
 
 fn bench_simple_inline_citations(c: &mut Criterion) {
     let input = "Recent research[1][2] shows promise[3] in this field[4].";
@@ -7,7 +7,9 @@ fn bench_simple_inline_citations(c: &mut Criterion) {
     let mut group = c.benchmark_group("simple_citations");
     group.throughput(Throughput::Bytes(input.len() as u64));
 
-    group.bench_function("inline_numeric", |b| b.iter(|| clean(black_box(input))));
+    group.bench_function("inline_numeric", |b| {
+        b.iter(|| remove_citations(black_box(input)))
+    });
 
     group.finish();
 }
@@ -49,7 +51,9 @@ The data shows[11][12] significant improvements[13].
     let mut group = c.benchmark_group("complex_document");
     group.throughput(Throughput::Bytes(input.len() as u64));
 
-    group.bench_function("full_document", |b| b.iter(|| clean(black_box(input))));
+    group.bench_function("full_document", |b| {
+        b.iter(|| remove_citations(black_box(input)))
+    });
 
     group.finish();
 }
@@ -60,7 +64,9 @@ fn bench_real_world_chatgpt(c: &mut Criterion) {
     let mut group = c.benchmark_group("real_world");
     group.throughput(Throughput::Bytes(input.len() as u64));
 
-    group.bench_function("chatgpt_format", |b| b.iter(|| clean(black_box(input))));
+    group.bench_function("chatgpt_format", |b| {
+        b.iter(|| remove_citations(black_box(input)))
+    });
 
     group.finish();
 }
@@ -71,7 +77,9 @@ fn bench_real_world_perplexity(c: &mut Criterion) {
     let mut group = c.benchmark_group("real_world");
     group.throughput(Throughput::Bytes(input.len() as u64));
 
-    group.bench_function("perplexity_format", |b| b.iter(|| clean(black_box(input))));
+    group.bench_function("perplexity_format", |b| {
+        b.iter(|| remove_citations(black_box(input)))
+    });
 
     group.finish();
 }
@@ -92,9 +100,9 @@ fn bench_batch_processing(c: &mut Criterion) {
 
     group.bench_function("5_documents", |b| {
         b.iter(|| {
-            let cleaner = CitationCleaner::new();
+            let remover = CitationRemover::new();
             for url in &urls {
-                black_box(cleaner.clean(url));
+                black_box(remover.remove(url));
             }
         })
     });
@@ -108,7 +116,9 @@ fn bench_no_citations(c: &mut Criterion) {
     let mut group = c.benchmark_group("edge_cases");
     group.throughput(Throughput::Bytes(input.len() as u64));
 
-    group.bench_function("no_citations", |b| b.iter(|| clean(black_box(input))));
+    group.bench_function("no_citations", |b| {
+        b.iter(|| remove_citations(black_box(input)))
+    });
 
     group.finish();
 }
@@ -119,7 +129,9 @@ fn bench_only_citations(c: &mut Criterion) {
     let mut group = c.benchmark_group("edge_cases");
     group.throughput(Throughput::Bytes(input.len() as u64));
 
-    group.bench_function("only_citations", |b| b.iter(|| clean(black_box(input))));
+    group.bench_function("only_citations", |b| {
+        b.iter(|| remove_citations(black_box(input)))
+    });
 
     group.finish();
 }

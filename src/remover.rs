@@ -1,31 +1,31 @@
-use crate::config::CleanerConfig;
+use crate::config::RemoverConfig;
 use crate::patterns::Patterns;
 
-/// Main citation cleaner
-pub struct CitationCleaner {
-    config: CleanerConfig,
+/// Main citation remover
+pub struct CitationRemover {
+    config: RemoverConfig,
     patterns: &'static Patterns,
 }
 
-impl CitationCleaner {
-    /// Create new cleaner with default configuration
+impl CitationRemover {
+    /// Create new remover with default configuration
     pub fn new() -> Self {
         Self {
-            config: CleanerConfig::default(),
+            config: RemoverConfig::default(),
             patterns: Patterns::get(),
         }
     }
 
-    /// Create cleaner with custom configuration
-    pub fn with_config(config: CleanerConfig) -> Self {
+    /// Create remover with custom configuration
+    pub fn with_config(config: RemoverConfig) -> Self {
         Self {
             config,
             patterns: Patterns::get(),
         }
     }
 
-    /// Clean markdown string, removing all citations
-    pub fn clean(&self, markdown: &str) -> String {
+    /// Remove citations from markdown string
+    pub fn remove(&self, markdown: &str) -> String {
         let mut result = markdown.to_string();
 
         // Step 1: Remove reference sections FIRST (before inline citations)
@@ -142,7 +142,7 @@ impl CitationCleaner {
     }
 }
 
-impl Default for CitationCleaner {
+impl Default for CitationRemover {
     fn default() -> Self {
         Self::new()
     }
@@ -154,63 +154,63 @@ mod tests {
 
     #[test]
     fn test_remove_inline_numeric() {
-        let cleaner = CitationCleaner::new();
+        let remover = CitationRemover::new();
         let input = "Text[1] with[2] citations[3].";
-        let result = cleaner.remove_inline_citations(input);
+        let result = remover.remove_inline_citations(input);
         assert_eq!(result, "Text with citations.");
     }
 
     #[test]
     fn test_remove_inline_named() {
-        let cleaner = CitationCleaner::new();
+        let remover = CitationRemover::new();
         let input = "Text[source:1] with[ref:2] citations.";
-        let result = cleaner.remove_inline_citations(input);
+        let result = remover.remove_inline_citations(input);
         assert_eq!(result, "Text with citations.");
     }
 
     #[test]
     fn test_normalize_whitespace() {
-        let cleaner = CitationCleaner::new();
+        let remover = CitationRemover::new();
         let input = "Text  with    multiple     spaces.";
-        let result = cleaner.normalize_whitespace(input);
+        let result = remover.normalize_whitespace(input);
         assert_eq!(result, "Text with multiple spaces.");
     }
 
     #[test]
     fn test_remove_excessive_blank_lines() {
-        let cleaner = CitationCleaner::new();
+        let remover = CitationRemover::new();
         let input = "Line 1\n\n\n\n\nLine 2";
-        let result = cleaner.remove_excessive_blank_lines(input);
+        let result = remover.remove_excessive_blank_lines(input);
         assert_eq!(result, "Line 1\n\nLine 2");
     }
 
     #[test]
     fn test_trim_all_lines() {
-        let cleaner = CitationCleaner::new();
+        let remover = CitationRemover::new();
         let input = "Line 1   \nLine 2  \nLine 3 ";
-        let result = cleaner.trim_all_lines(input);
+        let result = remover.trim_all_lines(input);
         assert_eq!(result, "Line 1\nLine 2\nLine 3");
     }
 
     #[test]
     fn test_remove_reference_sections_with_header() {
-        let cleaner = CitationCleaner::new();
+        let remover = CitationRemover::new();
         let input = "Content here.\n\n## References\n[1]: https://example.com";
-        let result = cleaner.remove_reference_sections(input);
+        let result = remover.remove_reference_sections(input);
         assert_eq!(result.trim(), "Content here.");
     }
 
     #[test]
     fn test_remove_reference_sections_without_header() {
-        let cleaner = CitationCleaner::new();
+        let remover = CitationRemover::new();
         let input = "Content here.\n\n[1]: https://example.com\n[2]: https://test.com";
-        let result = cleaner.remove_reference_sections(input);
+        let result = remover.remove_reference_sections(input);
         assert_eq!(result.trim(), "Content here.");
     }
 
     #[test]
     fn test_custom_config() {
-        let config = CleanerConfig {
+        let config = RemoverConfig {
             remove_inline_citations: true,
             remove_reference_links: false,
             remove_reference_headers: false,
@@ -219,18 +219,18 @@ mod tests {
             remove_blank_lines: false,
             trim_lines: false,
         };
-        let cleaner = CitationCleaner::with_config(config);
+        let remover = CitationRemover::with_config(config);
         let input = "Text[1].\n\n[1]: https://example.com";
-        let result = cleaner.clean(input);
+        let result = remover.remove(input);
         assert!(!result.contains("[1]"));
         assert!(result.contains("https://example.com"));
     }
 
     #[test]
     fn test_full_pipeline() {
-        let cleaner = CitationCleaner::new();
+        let remover = CitationRemover::new();
         let input = "Text[1]  with   spaces.\n\n\n\n## References\n[1]: https://example.com";
-        let result = cleaner.clean(input);
+        let result = remover.remove(input);
         assert!(!result.contains("[1]"));
         assert!(!result.contains("https://example.com"));
         assert!(!result.contains("  "));
