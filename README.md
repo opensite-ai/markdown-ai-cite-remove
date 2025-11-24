@@ -316,12 +316,18 @@ cargo bench -- --save-baseline main
 
 # Compare against baseline
 cargo bench -- --baseline main
+
+# View results (after running benchmarks)
+open target/criterion/report/index.html  # macOS
+xdg-open target/criterion/report/index.html  # Linux
+start target/criterion/report/index.html  # Windows
 ```
 
 **Note about benchmark output:**
 - Tests shown as "ignored" during `cargo bench` is **normal behavior** - regular tests are skipped during benchmarking to avoid interference
 - Outliers (3-13% of measurements) are normal due to OS scheduling and CPU frequency scaling
 - "Gnuplot not found" warning is harmless - Criterion uses an alternative plotting backend
+- **With Gnuplot installed**: Interactive HTML reports with charts are generated in `target/criterion/report/`
 
 ### Performance Characteristics
 

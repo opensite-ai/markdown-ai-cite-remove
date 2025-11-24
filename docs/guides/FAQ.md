@@ -99,6 +99,25 @@ cargo bench -- --quick
 
 This reduces sample size for faster results (less accurate but good for development).
 
+### Q: How do I view benchmark visualizations?
+
+**A:** After running `cargo bench`, Criterion generates HTML reports with charts:
+
+```bash
+# View main report
+open target/criterion/report/index.html        # macOS
+xdg-open target/criterion/report/index.html    # Linux
+start target/criterion/report/index.html       # Windows
+```
+
+The reports include:
+- Line charts showing performance over time
+- Violin plots showing distribution
+- Statistical analysis (PDF/CDF plots)
+- Comparison charts (if using baselines)
+
+**Note**: Gnuplot must be installed for the best visualizations. See installation instructions in the main README.
+
 ## Usage
 
 ### Q: How do I clean a file in-place?

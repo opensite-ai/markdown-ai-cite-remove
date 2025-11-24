@@ -160,6 +160,66 @@ sudo apt-get install gnuplot
 # Download from http://www.gnuplot.info/
 ```
 
+### Viewing Benchmark Visualizations
+
+After running `cargo bench`, Criterion generates HTML reports with interactive charts:
+
+**1. View the main report:**
+```bash
+# macOS
+open target/criterion/report/index.html
+
+# Linux
+xdg-open target/criterion/report/index.html
+
+# Windows
+start target/criterion/report/index.html
+```
+
+**2. View individual benchmark reports:**
+```bash
+# Simple citations benchmark
+open target/criterion/simple_citations/inline_numeric/report/index.html
+
+# Real-world ChatGPT benchmark
+open target/criterion/real_world/chatgpt_format/report/index.html
+
+# Complex document benchmark
+open target/criterion/complex_document/full_document/report/index.html
+```
+
+**3. What you'll see:**
+- **Line charts** - Performance over time
+- **Violin plots** - Distribution of measurements
+- **PDF/CDF plots** - Statistical analysis
+- **Comparison charts** - Before/after comparisons (with baselines)
+- **Detailed statistics** - Mean, median, std dev, outliers
+
+**4. Report structure:**
+```
+target/criterion/
+├── report/
+│   └── index.html              # Main report (start here)
+├── simple_citations/
+│   └── inline_numeric/
+│       └── report/
+│           └── index.html      # Individual benchmark report
+├── complex_document/
+│   └── full_document/
+│       └── report/
+│           └── index.html
+├── real_world/
+│   ├── chatgpt_format/
+│   │   └── report/
+│   │       └── index.html
+│   └── perplexity_format/
+│       └── report/
+│           └── index.html
+└── ... (other benchmarks)
+```
+
+**Tip**: Bookmark `target/criterion/report/index.html` for easy access after each benchmark run!
+
 ## Comparing Benchmarks
 
 ### Save a Baseline

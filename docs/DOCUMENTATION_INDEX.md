@@ -59,6 +59,18 @@ Contains:
 - Want to compare performance changes
 - Need to understand the "Gnuplot not found" warning
 
+### [VIEWING_BENCHMARKS.md](performance/VIEWING_BENCHMARKS.md) - Benchmark Visualizations
+**Quick guide to viewing interactive benchmark reports.**
+
+Contains:
+- How to view HTML reports with charts
+- Report structure and navigation
+- Understanding the visualizations
+- Using baselines for comparison
+- Tips and troubleshooting
+
+**Read this if** you want to see visual charts and graphs of benchmark results.
+
 ---
 
 ### [FAQ.md](guides/FAQ.md) - Frequently Asked Questions
