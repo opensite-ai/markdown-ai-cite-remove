@@ -5,6 +5,8 @@
 [![License](https://img.shields.io/crates/l/markdown-ai-cite-remove.svg)](LICENSE)
 [![Tests](https://img.shields.io/badge/tests-58%20passing-brightgreen)](tests/)
 
+> *"Five years of AI evolution and flirting with AGI. Zero libraries to remove `[1][2][3]` from markdown 🙄. Remember me well when they take over."*
+
 **Remove AI-generated citations and annotations from Markdown text**
 
 High-performance Rust library for cleaning ChatGPT, Claude, Perplexity, and other AI markdown responses. Removes inline citations `[1][2]`, reference links `[1]: https://...`, and bibliography sections with 100% accuracy.
@@ -475,4 +477,3 @@ Licensed under either of:
 - MIT license ([LICENSE-MIT](LICENSE-MIT) or http://opensource.org/licenses/MIT)
 
 at your option.
-
