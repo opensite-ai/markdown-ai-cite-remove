@@ -1,4 +1,4 @@
-![rust-markdown-ai-cite-remove-banner](https://github.com/user-attachments/assets/4c434a97-88de-4aea-9471-c96d4357f0c9)
+![markdown-ai-banner-primary](https://github.com/user-attachments/assets/7974c422-2ad1-442b-8c08-c82026100341)
 
 # Rust Crate: Markdown AI Citation Removal
 
