@@ -3,14 +3,12 @@ use markdown_ai_cite_remove::{clean, CitationCleaner};
 
 fn bench_simple_inline_citations(c: &mut Criterion) {
     let input = "Recent research[1][2] shows promise[3] in this field[4].";
-    
+
     let mut group = c.benchmark_group("simple_citations");
     group.throughput(Throughput::Bytes(input.len() as u64));
-    
-    group.bench_function("inline_numeric", |b| {
-        b.iter(|| clean(black_box(input)))
-    });
-    
+
+    group.bench_function("inline_numeric", |b| b.iter(|| clean(black_box(input))));
+
     group.finish();
 }
 
@@ -47,40 +45,34 @@ The data shows[11][12] significant improvements[13].
 [12]: https://example.com/paper12
 [13]: https://example.com/paper13
 "#;
-    
+
     let mut group = c.benchmark_group("complex_document");
     group.throughput(Throughput::Bytes(input.len() as u64));
-    
-    group.bench_function("full_document", |b| {
-        b.iter(|| clean(black_box(input)))
-    });
-    
+
+    group.bench_function("full_document", |b| b.iter(|| clean(black_box(input))));
+
     group.finish();
 }
 
 fn bench_real_world_chatgpt(c: &mut Criterion) {
     let input = include_str!("../tests/fixtures/chatgpt.md");
-    
+
     let mut group = c.benchmark_group("real_world");
     group.throughput(Throughput::Bytes(input.len() as u64));
-    
-    group.bench_function("chatgpt_format", |b| {
-        b.iter(|| clean(black_box(input)))
-    });
-    
+
+    group.bench_function("chatgpt_format", |b| b.iter(|| clean(black_box(input))));
+
     group.finish();
 }
 
 fn bench_real_world_perplexity(c: &mut Criterion) {
     let input = include_str!("../tests/fixtures/perplexity.md");
-    
+
     let mut group = c.benchmark_group("real_world");
     group.throughput(Throughput::Bytes(input.len() as u64));
-    
-    group.bench_function("perplexity_format", |b| {
-        b.iter(|| clean(black_box(input)))
-    });
-    
+
+    group.bench_function("perplexity_format", |b| b.iter(|| clean(black_box(input))));
+
     group.finish();
 }
 
@@ -92,12 +84,12 @@ fn bench_batch_processing(c: &mut Criterion) {
         "Studies[source:1] indicate.",
         "Final[6] text[7][8].",
     ];
-    
+
     let total_bytes: usize = urls.iter().map(|s| s.len()).sum();
-    
+
     let mut group = c.benchmark_group("batch_processing");
     group.throughput(Throughput::Bytes(total_bytes as u64));
-    
+
     group.bench_function("5_documents", |b| {
         b.iter(|| {
             let cleaner = CitationCleaner::new();
@@ -106,33 +98,29 @@ fn bench_batch_processing(c: &mut Criterion) {
             }
         })
     });
-    
+
     group.finish();
 }
 
 fn bench_no_citations(c: &mut Criterion) {
     let input = "This is a long document with no citations at all. It contains multiple paragraphs and sentences, but no citation markers whatsoever.";
-    
+
     let mut group = c.benchmark_group("edge_cases");
     group.throughput(Throughput::Bytes(input.len() as u64));
-    
-    group.bench_function("no_citations", |b| {
-        b.iter(|| clean(black_box(input)))
-    });
-    
+
+    group.bench_function("no_citations", |b| b.iter(|| clean(black_box(input))));
+
     group.finish();
 }
 
 fn bench_only_citations(c: &mut Criterion) {
     let input = "[1][2][3][4][5][6][7][8][9][10]";
-    
+
     let mut group = c.benchmark_group("edge_cases");
     group.throughput(Throughput::Bytes(input.len() as u64));
-    
-    group.bench_function("only_citations", |b| {
-        b.iter(|| clean(black_box(input)))
-    });
-    
+
+    group.bench_function("only_citations", |b| b.iter(|| clean(black_box(input))));
+
     group.finish();
 }
 
@@ -147,4 +135,3 @@ criterion_group!(
     bench_only_citations
 );
 criterion_main!(benches);
-

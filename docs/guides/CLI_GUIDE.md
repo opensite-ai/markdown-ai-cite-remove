@@ -379,5 +379,5 @@ md-cite-clean --help
 md-cite-clean --version
 ```
 
-For more information, see the main [README.md](README.md) or [BENCHMARKING.md](BENCHMARKING.md).
+For more information, see the main [README.md](../../README.md) or [BENCHMARKING.md](../performance/BENCHMARKING.md).
 

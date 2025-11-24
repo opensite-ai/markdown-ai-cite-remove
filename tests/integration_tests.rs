@@ -58,7 +58,8 @@ fn test_preserves_markdown_formatting() {
 
 #[test]
 fn test_preserves_markdown_links() {
-    let input = "Check out [this link](https://example.com) for more[1].\n\n[1]: https://citation.com";
+    let input =
+        "Check out [this link](https://example.com) for more[1].\n\n[1]: https://citation.com";
     let cleaned = clean(input);
     assert!(cleaned.contains("[this link](https://example.com)"));
     assert!(!cleaned.contains("[1]"));
@@ -150,16 +151,16 @@ fn test_custom_config_all_disabled() {
 fn test_real_world_chatgpt_format() {
     let input = include_str!("fixtures/chatgpt.md");
     let cleaned = clean(input);
-    
+
     // Verify no inline citations remain
     assert!(!cleaned.contains("[1]"));
     assert!(!cleaned.contains("[2]"));
     assert!(!cleaned.contains("[3]"));
-    
+
     // Verify no reference links remain
     assert!(!cleaned.contains("https://podcasts.apple.com"));
     assert!(!cleaned.contains("https://www.linkedin.com"));
-    
+
     // Verify content is preserved
     assert!(cleaned.contains("What your content signals today"));
 }
@@ -231,7 +232,8 @@ fn test_reference_with_title() {
 
 #[test]
 fn test_multiple_reference_sections() {
-    let input = "Content.\n\n## References\n[1]: https://example.com\n\n## Sources\n[2]: https://test.com";
+    let input =
+        "Content.\n\n## References\n[1]: https://example.com\n\n## Sources\n[2]: https://test.com";
     // Once we find the first reference section, we remove everything from that point onward
     let expected = "Content.";
     assert_eq!(clean(input).trim(), expected);
@@ -253,7 +255,8 @@ fn test_notes_header() {
 
 #[test]
 fn test_mixed_reference_formats() {
-    let input = "Content.\n\n[1]: https://example.com\n[2] https://test.com\n[3]: https://another.com";
+    let input =
+        "Content.\n\n[1]: https://example.com\n[2] https://test.com\n[3]: https://another.com";
     let expected = "Content.";
     assert_eq!(clean(input).trim(), expected);
 }
@@ -326,4 +329,3 @@ fn test_cleaner_reusability() {
     assert_eq!(cleaner.clean(input2), "More.");
     assert_eq!(cleaner.clean(input3), "Final.");
 }
-

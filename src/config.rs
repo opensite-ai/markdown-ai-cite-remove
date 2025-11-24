@@ -3,22 +3,22 @@
 pub struct CleanerConfig {
     /// Remove inline citations like [1][2]
     pub remove_inline_citations: bool,
-    
+
     /// Remove reference link lists at bottom
     pub remove_reference_links: bool,
-    
+
     /// Remove reference section headers (## References)
     pub remove_reference_headers: bool,
-    
+
     /// Remove full bibliographic entries
     pub remove_reference_entries: bool,
-    
+
     /// Normalize whitespace after removal
     pub normalize_whitespace: bool,
-    
+
     /// Remove blank lines left by removed sections
     pub remove_blank_lines: bool,
-    
+
     /// Trim trailing whitespace from lines
     pub trim_lines: bool,
 }
@@ -42,7 +42,7 @@ impl CleanerConfig {
     pub fn new() -> Self {
         Self::default()
     }
-    
+
     /// Create a configuration that only removes inline citations
     pub fn inline_only() -> Self {
         Self {
@@ -55,7 +55,7 @@ impl CleanerConfig {
             trim_lines: true,
         }
     }
-    
+
     /// Create a configuration that only removes reference sections
     pub fn references_only() -> Self {
         Self {
@@ -80,4 +80,3 @@ pub enum RemovalMode {
     /// Remove only reference lists, keep inline citations
     ReferencesOnly,
 }
-

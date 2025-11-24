@@ -135,7 +135,7 @@ find . -name "*.md" -exec md-cite-clean {} -o {}.clean \;
 ls *.md | parallel md-cite-clean {} -o cleaned_{}
 ```
 
-See [CLI_GUIDE.md](CLI_GUIDE.md) for more examples.
+See [CLI_GUIDE.md](CLI_GUIDE.md) (this file) for more examples.
 
 ### Q: Does it work with stdin/stdout?
 
@@ -334,7 +334,7 @@ If tests still fail, please open an issue with the error output.
 - Improve documentation
 - Add test cases
 
-See the main [README.md](README.md) for development setup.
+See the main [README.md](../../README.md) for development setup.
 
 ### Q: What's the development workflow?
 
@@ -385,7 +385,7 @@ cargo test test_my_new_case
 ### Q: Where can I get more help?
 
 **A:**
-- **Documentation**: [README.md](README.md), [CLI_GUIDE.md](CLI_GUIDE.md), [BENCHMARKING.md](BENCHMARKING.md)
+- **Documentation**: [README.md](../../README.md), [CLI_GUIDE.md](CLI_GUIDE.md), [BENCHMARKING.md](../performance/BENCHMARKING.md)
 - **API Docs**: Run `cargo doc --open`
 - **Examples**: Check the `examples/` directory
 - **Issues**: Open an issue on GitHub

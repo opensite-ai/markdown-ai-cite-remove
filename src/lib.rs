@@ -102,7 +102,8 @@ mod tests {
 
     #[test]
     fn test_clean_preserves_markdown() {
-        let input = "# Heading\n\nSome **bold** text[1] and *italic*[2].\n\n[1]: https://example.com";
+        let input =
+            "# Heading\n\nSome **bold** text[1] and *italic*[2].\n\n[1]: https://example.com";
         let expected = "# Heading\n\nSome **bold** text and *italic*.";
         assert_eq!(clean(input).trim(), expected);
     }
@@ -118,4 +119,3 @@ mod tests {
         assert_eq!(clean(input), input);
     }
 }
-

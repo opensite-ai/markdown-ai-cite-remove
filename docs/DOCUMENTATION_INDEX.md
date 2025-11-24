@@ -4,7 +4,7 @@ Complete guide to all documentation for the `markdown-ai-cite-remove` crate.
 
 ## 📚 Main Documentation
 
-### [README.md](README.md) - Start Here!
+### [README.md](../README.md) - Start Here!
 **The main entry point for all users.**
 
 Contains:
@@ -25,7 +25,7 @@ Contains:
 
 ## 🎯 Specialized Guides
 
-### [CLI_GUIDE.md](CLI_GUIDE.md) - Command-Line Tool
+### [CLI_GUIDE.md](guides/CLI_GUIDE.md) - Command-Line Tool
 **Complete guide for using the `md-cite-clean` CLI tool.**
 
 Contains:
@@ -41,7 +41,7 @@ Contains:
 
 ---
 
-### [BENCHMARKING.md](BENCHMARKING.md) - Performance Guide
+### [BENCHMARKING.md](performance/BENCHMARKING.md) - Performance Guide
 **Understanding benchmark results and performance metrics.**
 
 Contains:
@@ -61,7 +61,7 @@ Contains:
 
 ---
 
-### [FAQ.md](FAQ.md) - Frequently Asked Questions
+### [FAQ.md](guides/FAQ.md) - Frequently Asked Questions
 **Quick answers to common questions.**
 
 Contains:
@@ -79,8 +79,10 @@ Contains:
 
 ## 📖 Reference Documentation
 
-### [IMPLEMENTATION_SUMMARY.md](IMPLEMENTATION_SUMMARY.md) - Project Overview
+### IMPLEMENTATION_SUMMARY.md - Project Overview
 **Complete technical overview of the implementation.**
+
+*Note: This file may have been moved or removed during reorganization. Check the repository root or docs directory.*
 
 Contains:
 - Project status and completion details
@@ -117,7 +119,7 @@ Contains:
 
 ## 💡 Examples
 
-### [examples/basic_usage.rs](examples/basic_usage.rs)
+### [examples/basic_usage.rs](../examples/basic_usage.rs)
 Simple examples showing common use cases.
 
 Run it:
@@ -125,7 +127,7 @@ Run it:
 cargo run --example basic_usage
 ```
 
-### [examples/custom_config.rs](examples/custom_config.rs)
+### [examples/custom_config.rs](../examples/custom_config.rs)
 Advanced examples with custom configuration.
 
 Run it:
@@ -137,11 +139,15 @@ cargo run --example custom_config
 
 ## 🔍 QA Documentation
 
-### [docs/qa/QA_RESPONSES.md](docs/qa/QA_RESPONSES.md)
+### QA_RESPONSES.md
 Detailed responses to QA questions and documentation improvements made.
 
-### [docs/qa/bench.txt](docs/qa/bench.txt)
+*Note: Check the docs/qa directory if this file exists.*
+
+### bench.txt
 Sample benchmark output for reference.
+
+*Note: Check the docs/qa directory if this file exists.*
 
 ---
 
@@ -150,34 +156,34 @@ Sample benchmark output for reference.
 ### I want to...
 
 **...get started quickly**
-→ Read [README.md](README.md) Quick Start section
+→ Read [README.md](../README.md) Quick Start section
 
 **...install the CLI tool**
-→ Read [CLI_GUIDE.md](CLI_GUIDE.md) Installation section
+→ Read [CLI_GUIDE.md](guides/CLI_GUIDE.md) Installation section
 
 **...use it in my Rust project**
-→ Read [README.md](README.md) Library Usage section
+→ Read [README.md](../README.md) Library Usage section
 
 **...understand benchmark results**
-→ Read [BENCHMARKING.md](BENCHMARKING.md)
+→ Read [BENCHMARKING.md](performance/BENCHMARKING.md)
 
 **...find answer to a specific question**
-→ Read [FAQ.md](FAQ.md)
+→ Read [FAQ.md](guides/FAQ.md)
 
 **...batch process files**
-→ Read [CLI_GUIDE.md](CLI_GUIDE.md) Batch Processing section
+→ Read [CLI_GUIDE.md](guides/CLI_GUIDE.md) Batch Processing section
 
 **...integrate with CI/CD**
-→ Read [CLI_GUIDE.md](CLI_GUIDE.md) Automation Examples section
+→ Read [CLI_GUIDE.md](guides/CLI_GUIDE.md) Automation Examples section
 
 **...understand performance**
-→ Read [README.md](README.md) Performance section or [BENCHMARKING.md](BENCHMARKING.md)
+→ Read [README.md](../README.md) Performance section or [BENCHMARKING.md](performance/BENCHMARKING.md)
 
 **...contribute to the project**
-→ Read [README.md](README.md) Contributing section
+→ Read [README.md](../README.md) Contributing section
 
 **...troubleshoot an issue**
-→ Read [FAQ.md](FAQ.md) or [README.md](README.md) Troubleshooting section
+→ Read [FAQ.md](guides/FAQ.md) or [README.md](../README.md) Troubleshooting section
 
 ---
 
@@ -196,22 +202,22 @@ Sample benchmark output for reference.
 
 ### For New Users
 
-1. **Start**: [README.md](README.md) - Overview and quick start
+1. **Start**: [README.md](../README.md) - Overview and quick start
 2. **Practice**: Run examples in `examples/` directory
-3. **Deep Dive**: [CLI_GUIDE.md](CLI_GUIDE.md) or API docs depending on use case
-4. **Reference**: [FAQ.md](FAQ.md) for specific questions
+3. **Deep Dive**: [CLI_GUIDE.md](guides/CLI_GUIDE.md) or API docs depending on use case
+4. **Reference**: [FAQ.md](guides/FAQ.md) for specific questions
 
 ### For Contributors
 
-1. **Start**: [IMPLEMENTATION_SUMMARY.md](IMPLEMENTATION_SUMMARY.md)
-2. **Setup**: [README.md](README.md) Contributing section
+1. **Start**: Check repository root for IMPLEMENTATION_SUMMARY.md
+2. **Setup**: [README.md](../README.md) Contributing section
 3. **Understand**: Read source code with `cargo doc --open`
 4. **Test**: Run `cargo test` and `cargo bench`
 
 ### For Performance Tuning
 
-1. **Start**: [README.md](README.md) Performance section
-2. **Deep Dive**: [BENCHMARKING.md](BENCHMARKING.md)
+1. **Start**: [README.md](../README.md) Performance section
+2. **Deep Dive**: [BENCHMARKING.md](performance/BENCHMARKING.md)
 3. **Measure**: Run `cargo bench` with baselines
 4. **Optimize**: Use profiling tools if needed
 
@@ -240,7 +246,7 @@ This documentation is actively maintained. Last updated: 2025-01-24
 
 If you can't find what you're looking for:
 
-1. **Check [FAQ.md](FAQ.md)** - Most common questions are answered
+1. **Check [FAQ.md](guides/FAQ.md)** - Most common questions are answered
 2. **Search documentation** - Use your editor's search function
 3. **Check examples** - Working code in `examples/` directory
 4. **Open an issue** - On GitHub with your question
@@ -257,5 +263,5 @@ Documentation improvements are welcome! To contribute:
 3. Test that examples still work
 4. Submit a pull request
 
-See [README.md](README.md) Contributing section for details.
+See [README.md](../README.md) Contributing section for details.
 

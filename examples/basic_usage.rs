@@ -46,4 +46,3 @@ Check out [this link](https://example.com) for more information[5].
     println!("Input:\n{}", input4);
     println!("\nOutput:\n{}", cleaned4);
 }
-

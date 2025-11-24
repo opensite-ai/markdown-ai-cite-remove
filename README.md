@@ -9,7 +9,7 @@
 
 High-performance Rust library for cleaning ChatGPT, Claude, Perplexity, and other AI markdown responses. Removes inline citations `[1][2]`, reference links `[1]: https://...`, and bibliography sections with 100% accuracy.
 
-> 📚 **New!** Comprehensive documentation added: [CLI Guide](CLI_GUIDE.md) • [Benchmarking Guide](BENCHMARKING.md) • [FAQ](FAQ.md) • [Documentation Index](DOCUMENTATION_INDEX.md)
+> 📚 **New!** Comprehensive documentation added: [CLI Guide](docs/guides/CLI_GUIDE.md) • [Benchmarking Guide](docs/performance/BENCHMARKING.md) • [FAQ](docs/guides/FAQ.md) • [Documentation Index](docs/DOCUMENTATION_INDEX.md)
 
 ## ⚡ Performance-First
 
@@ -238,9 +238,10 @@ echo "Cleaned $(ls -1 "$INPUT_DIR"/*.md | wc -l) files"
 
 ## 📖 Documentation
 
-- **[FAQ](FAQ.md)** - Frequently asked questions and troubleshooting
-- **[CLI Usage Guide](CLI_GUIDE.md)** - Complete command-line tool documentation
-- **[Benchmarking Guide](BENCHMARKING.md)** - Understanding performance metrics
+- **[FAQ](docs/guides/FAQ.md)** - Frequently asked questions and troubleshooting
+- **[CLI Usage Guide](docs/guides/CLI_GUIDE.md)** - Complete command-line tool documentation
+- **[Benchmarking Guide](docs/performance/BENCHMARKING.md)** - Understanding performance metrics
+- **[Documentation Index](docs/DOCUMENTATION_INDEX.md)** - Complete guide to all documentation
 - **[API Documentation](https://docs.rs/markdown-ai-cite-remove)** - Full API reference
 - **[Examples](examples/)** - Working code examples
 
@@ -392,7 +393,7 @@ When running `cargo bench`, you'll see tests marked as "ignored" - **this is nor
 ### Common Issues
 
 **Q: Why do tests show as "ignored" when running `cargo bench`?**
-A: This is normal Rust behavior. When running benchmarks, regular tests are automatically skipped to avoid interfering with timing measurements. All tests pass when you run `cargo test`.
+A: This is normal Rust behavior. When running benchmarks, regular tests are automatically skipped to avoid interfering with timing measurements. All tests pass when you run `cargo test`. See [BENCHMARKING.md](docs/performance/BENCHMARKING.md) for details.
 
 **Q: What does "Gnuplot not found, using plotters backend" mean?**
 A: This is just an informational message. Criterion (the benchmarking library) can use Gnuplot for visualization, but falls back to an alternative plotting backend if it's not installed. Benchmarks still run correctly. To install Gnuplot:

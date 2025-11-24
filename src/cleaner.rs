@@ -15,7 +15,7 @@ impl CitationCleaner {
             patterns: Patterns::get(),
         }
     }
-    
+
     /// Create cleaner with custom configuration
     pub fn with_config(config: CleanerConfig) -> Self {
         Self {
@@ -23,7 +23,7 @@ impl CitationCleaner {
             patterns: Patterns::get(),
         }
     }
-    
+
     /// Clean markdown string, removing all citations
     pub fn clean(&self, markdown: &str) -> String {
         let mut result = markdown.to_string();
@@ -41,38 +41,46 @@ impl CitationCleaner {
         if self.config.remove_inline_citations {
             result = self.remove_inline_citations(&result);
         }
-        
+
         // Step 3: Cleanup whitespace
         if self.config.normalize_whitespace {
             result = self.normalize_whitespace(&result);
         }
-        
+
         // Step 4: Remove excessive blank lines
         if self.config.remove_blank_lines {
             result = self.remove_excessive_blank_lines(&result);
         }
-        
+
         // Step 5: Trim lines
         if self.config.trim_lines {
             result = self.trim_all_lines(&result);
         }
-        
+
         result
     }
-    
+
     /// Remove inline citations: [1][2][source:3]
     fn remove_inline_citations(&self, text: &str) -> String {
         let mut result = text.to_string();
-        
+
         // Remove numeric citations [1][2]
-        result = self.patterns.inline_numeric.replace_all(&result, "").to_string();
-        
+        result = self
+            .patterns
+            .inline_numeric
+            .replace_all(&result, "")
+            .to_string();
+
         // Remove named citations [source:1][ref:2]
-        result = self.patterns.inline_named.replace_all(&result, "").to_string();
-        
+        result = self
+            .patterns
+            .inline_named
+            .replace_all(&result, "")
+            .to_string();
+
         result
     }
-    
+
     /// Remove reference sections at end of document
     fn remove_reference_sections(&self, text: &str) -> String {
         let lines: Vec<&str> = text.lines().collect();
@@ -86,8 +94,7 @@ impl CitationCleaner {
             }
 
             // Check for reference header
-            if self.config.remove_reference_headers
-                && self.patterns.reference_header.is_match(line)
+            if self.config.remove_reference_headers && self.patterns.reference_header.is_match(line)
             {
                 references_start = Some(i);
                 break;
@@ -109,21 +116,23 @@ impl CitationCleaner {
             text.to_string()
         }
     }
-    
+
     /// Normalize multiple spaces to single space
     fn normalize_whitespace(&self, text: &str) -> String {
-        self.patterns.multiple_whitespace
+        self.patterns
+            .multiple_whitespace
             .replace_all(text, " ")
             .to_string()
     }
-    
+
     /// Remove excessive blank lines (3+ consecutive newlines → 2)
     fn remove_excessive_blank_lines(&self, text: &str) -> String {
-        self.patterns.excessive_newlines
+        self.patterns
+            .excessive_newlines
             .replace_all(text, "\n\n")
             .to_string()
     }
-    
+
     /// Trim whitespace from all lines
     fn trim_all_lines(&self, text: &str) -> String {
         text.lines()
@@ -228,4 +237,3 @@ mod tests {
         assert!(!result.contains("\n\n\n"));
     }
 }
-

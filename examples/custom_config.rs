@@ -39,16 +39,15 @@ fn main() {
     // Example 4: Reusable cleaner instance
     println!("\n4. Reusable cleaner:");
     let cleaner = CitationCleaner::with_config(CleanerConfig::default());
-    
-    let texts = vec![
+
+    let texts = [
         "First document[1].",
         "Second document[2][3].",
         "Third document[source:1].",
     ];
-    
+
     for (i, text) in texts.iter().enumerate() {
         let cleaned = cleaner.clean(text);
         println!("  Document {}: {} -> {}", i + 1, text, cleaned);
     }
 }
-

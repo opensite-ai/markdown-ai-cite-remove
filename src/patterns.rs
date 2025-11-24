@@ -18,28 +18,29 @@ pub(crate) struct Patterns {
 pub(crate) static PATTERNS: Lazy<Patterns> = Lazy::new(|| Patterns {
     // Inline numeric citations: [1][2][123]
     inline_numeric: Regex::new(r"\[\d+\]").unwrap(),
-    
+
     // Named source citations: [source:1][ref:2][cite:3][note:4]
     inline_named: Regex::new(r"\[(?:source|ref|cite|note):\d+\]").unwrap(),
-    
+
     // Link-style references: [1]: https://... or [1] https://...
     // Matches both [1]: and [1] (space) formats
     reference_link: Regex::new(r"(?m)^\[\d+\](?::\s*|\s+).*$").unwrap(),
-    
+
     // Reference section headers
     reference_header: Regex::new(
-        r"(?m)^#{1,6}\s*(?:References?|Citations?|Sources?|Bibliography|Notes?)\s*$"
-    ).unwrap(),
-    
+        r"(?m)^#{1,6}\s*(?:References?|Citations?|Sources?|Bibliography|Notes?)\s*$",
+    )
+    .unwrap(),
+
     // Full reference entries: [1] Author, A. (2024)...
     reference_entry: Regex::new(r"(?m)^\[\d+\]\s+[^\n]+$").unwrap(),
-    
+
     // Multiple whitespace normalization
     multiple_whitespace: Regex::new(r" {2,}").unwrap(),
-    
+
     // Trailing punctuation with extra spaces (e.g., "text. [1]" → "text.")
     trailing_punctuation_space: Regex::new(r"([.!?,;:])\s+(\[)").unwrap(),
-    
+
     // Excessive newlines (3+ consecutive newlines)
     excessive_newlines: Regex::new(r"\n{3,}").unwrap(),
 });
@@ -78,7 +79,9 @@ mod tests {
         let patterns = Patterns::get();
         assert!(patterns.reference_link.is_match("[1]: https://example.com"));
         assert!(patterns.reference_link.is_match("[2] https://example.com"));
-        assert!(!patterns.reference_link.is_match("  [1]: https://example.com"));
+        assert!(!patterns
+            .reference_link
+            .is_match("  [1]: https://example.com"));
     }
 
     #[test]
@@ -91,4 +94,3 @@ mod tests {
         assert!(!patterns.reference_header.is_match("## Other Section"));
     }
 }
-
