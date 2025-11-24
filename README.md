@@ -1,5 +1,7 @@
 ![markdown-ai-banner-primary](https://github.com/user-attachments/assets/7974c422-2ad1-442b-8c08-c82026100341)
 
+<br />
+
 # Rust Crate: Markdown AI Citation Removal
 
 [![Crates.io](https://img.shields.io/crates/v/markdown-ai-cite-remove.svg)](https://crates.io/crates/markdown-ai-cite-remove)
@@ -7,13 +9,24 @@
 [![License](https://img.shields.io/crates/l/markdown-ai-cite-remove.svg)](LICENSE)
 [![Tests](https://img.shields.io/badge/tests-58%20passing-brightgreen)](tests/)
 
+<br />
+
 > *"Five years of AI evolution and flirting with AGI. Zero libraries to remove `[1][2][3]` from markdown 🙄. Remember me well when they take over."*
+
+<br />
 
 **Remove AI-generated citations and annotations from Markdown text at the speed of Rust**
 
 High-performance Rust library for cleaning ChatGPT, Claude, Perplexity, and other AI markdown responses. Removes inline citations `[1][2]`, reference links `[1]: https://...`, and bibliography sections with 100% accuracy.
 
+<br />
+
 > 📚 [CLI Guide](docs/guides/CLI_GUIDE.md) • [Benchmarking Guide](docs/performance/BENCHMARKING.md) • [FAQ](docs/guides/FAQ.md) • [Documentation Index](docs/DOCUMENTATION_INDEX.md)
+
+<br />
+<br />
+
+---
 
 ## ⚡ Performance-First
 
@@ -22,11 +35,20 @@ High-performance Rust library for cleaning ChatGPT, Claude, Perplexity, and othe
 - **Regex-optimized** with lazy compilation
 - **Thread-safe** stateless design
 
+<br />
+
+---
+
 ## 🎯 Use Cases
+
+<br />
 
 ### Real-World Applications
 
-**1. Blog Publishing Pipeline**
+<br />
+
+#### **1. Blog Publishing Pipeline**
+
 ```rust
 // Clean AI-generated blog posts before publishing
 use markdown_ai_cite_remove::clean;
@@ -36,7 +58,10 @@ let clean_post = clean(&ai_draft);
 publish_to_cms(clean_post);
 ```
 
-**2. Documentation Generation**
+<br />
+
+#### **2. Documentation Generation**
+
 ```rust
 // Remove citations from AI-generated documentation
 let docs = generate_docs_with_ai();
@@ -44,7 +69,10 @@ let clean_docs = clean(&docs);
 write_to_file("README.md", clean_docs);
 ```
 
-**3. Content Aggregation**
+<br />
+
+#### **3. Content Aggregation**
+
 ```rust
 // Clean multiple AI responses
 use markdown_ai_cite_remove::CitationCleaner;
@@ -58,7 +86,10 @@ let cleaned: Vec<String> = responses
     .collect();
 ```
 
-**4. Streaming API Processing**
+<br />
+
+#### **4. Streaming API Processing**
+
 ```rust
 // Clean AI responses in real-time
 async fn process_stream(stream: impl Stream<Item = String>) {
@@ -73,11 +104,17 @@ async fn process_stream(stream: impl Stream<Item = String>) {
 }
 ```
 
-**5. Batch File Processing (CLI)**
+<br />
+
+#### **5. Batch File Processing (CLI)**
+
 ```bash
 # Clean all markdown files in a directory
 find ./ai_output -name "*.md" -exec md-cite-clean {} -o ./cleaned/{} \;
 ```
+
+<br />
+<br />
 
 ### Common Scenarios
 
@@ -90,7 +127,13 @@ find ./ai_output -name "*.md" -exec md-cite-clean {} -o ./cleaned/{} \;
 - ✅ Prepare content for CMS ingestion
 - ✅ Remove annotations from research summaries
 
+<br />
+
+---
+
 ## 📦 Installation
+
+<br />
 
 ### Prerequisites
 
@@ -104,6 +147,8 @@ find ./ai_output -name "*.md" -exec md-cite-clean {} -o ./cleaned/{} \;
   - Ubuntu/Debian: `sudo apt-get install gnuplot`
   - Windows: Download from http://www.gnuplot.info/
 
+<br />
+
 ### Library Installation
 
 Add to your `Cargo.toml`:
@@ -112,6 +157,8 @@ Add to your `Cargo.toml`:
 [dependencies]
 markdown-ai-cite-remove = "0.1"
 ```
+
+<br />
 
 ### CLI Installation
 
@@ -131,7 +178,13 @@ Verify installation:
 md-cite-clean --version
 ```
 
+<br />
+
+---
+
 ## 🚀 Quick Start
+
+<br />
 
 ### Quick Reference
 
@@ -145,6 +198,8 @@ md-cite-clean --version
 | Run benchmarks | `cargo bench` |
 | View docs | `cargo doc --open` |
 
+<br />
+
 ### Library Usage
 
 ```rust
@@ -155,27 +210,41 @@ let cleaned = clean(markdown);
 assert_eq!(cleaned.trim(), "AI research shows promise.");
 ```
 
+<br />
+
 ### CLI Usage
+
+<br />
 
 #### Basic Examples
 
 **1. Process from stdin to stdout (pipe mode):**
+
 ```bash
 echo "Text[1] here." | md-cite-clean
 # Output: Text here.
 ```
 
+<br />
+
 **2. Clean a file and print to stdout:**
+
 ```bash
 md-cite-clean document.md
 ```
 
+<br />
+
 **3. Clean a file and save to another file:**
+
 ```bash
 md-cite-clean input.md -o output.md
 ```
 
+<br />
+
 **4. Clean with verbose output (shows processing details):**
+
 ```bash
 md-cite-clean input.md -o output.md --verbose
 # Output:
@@ -186,9 +255,13 @@ md-cite-clean input.md -o output.md --verbose
 # Done!
 ```
 
+<br />
+<br />
+
 #### Advanced CLI Usage
 
 **Process multiple files:**
+
 ```bash
 # Using a loop
 for file in *.md; do
@@ -196,7 +269,10 @@ for file in *.md; do
 done
 ```
 
+<br />
+
 **Integration with other tools:**
+
 ```bash
 # Clean AI output from curl
 curl https://api.example.com/ai-response | md-cite-clean
@@ -211,7 +287,10 @@ md-cite-clean document.md | wc -w
 md-cite-clean input.md | pandoc -f markdown -t html -o output.html
 ```
 
+<br />
+
 **Using in scripts:**
+
 ```bash
 #!/bin/bash
 # clean_ai_docs.sh - Clean all AI-generated markdown files
@@ -229,6 +308,10 @@ done
 echo "Cleaned $(ls -1 "$INPUT_DIR"/*.md | wc -l) files"
 ```
 
+<br />
+
+---
+
 ## 🔧 Features
 
 - ✅ Remove inline numeric citations `[1][2][3]`
@@ -240,6 +323,10 @@ echo "Cleaned $(ls -1 "$INPUT_DIR"/*.md | wc -l) files"
 - ✅ Whitespace normalization
 - ✅ Configurable cleaning options
 
+<br />
+
+---
+
 ## 📖 Documentation
 
 - **[FAQ](docs/guides/FAQ.md)** - Frequently asked questions and troubleshooting
@@ -249,7 +336,13 @@ echo "Cleaned $(ls -1 "$INPUT_DIR"/*.md | wc -l) files"
 - **[API Documentation](https://docs.rs/markdown-ai-cite-remove)** - Full API reference
 - **[Examples](examples/)** - Working code examples
 
+<br />
+
+---
+
 ## 📚 Advanced Usage
+
+<br />
 
 ### Custom Configuration
 
@@ -277,6 +370,8 @@ let config = CleanerConfig {
 };
 ```
 
+<br />
+
 ### Reusable Cleaner Instance
 
 ```rust
@@ -289,6 +384,10 @@ let doc1 = cleaner.clean("First document[1].");
 let doc2 = cleaner.clean("Second document[2][3].");
 let doc3 = cleaner.clean("Third document[source:1].");
 ```
+
+<br />
+
+---
 
 ## 🧪 Examples
 
@@ -304,7 +403,13 @@ cargo run --example basic_usage
 cargo run --example custom_config
 ```
 
+<br />
+
+---
+
 ## 🏎️ Performance
+
+<br />
 
 ### Running Benchmarks
 
@@ -327,11 +432,15 @@ xdg-open target/criterion/report/index.html  # Linux
 start target/criterion/report/index.html  # Windows
 ```
 
+<br />
+
 **Note about benchmark output:**
 - Tests shown as "ignored" during `cargo bench` is **normal behavior** - regular tests are skipped during benchmarking to avoid interference
 - Outliers (3-13% of measurements) are normal due to OS scheduling and CPU frequency scaling
 - "Gnuplot not found" warning is harmless - Criterion uses an alternative plotting backend
 - **With Gnuplot installed**: Interactive HTML reports with charts are generated in `target/criterion/report/`
+
+<br />
 
 ### Performance Characteristics
 
@@ -346,15 +455,23 @@ Typical performance on modern hardware (Apple Silicon M-series):
 | Batch (5 documents) | ~2.2 μs | 43 MiB/s | Total for all 5 |
 | No citations (passthrough) | ~320 ns | 393 MiB/s | Fastest path |
 
+<br />
+
 **Key Insights:**
 - **Throughput**: 100-650 MB/s depending on document complexity
 - **Latency**: Sub-microsecond to ~250 μs for large documents
 - **Scalability**: Linear with document size
 - **Memory**: ~200-300 bytes per operation
 
+<br />
+
+---
+
 ## 🧪 Testing
 
 This library has **100%+ test coverage** with comprehensive edge case testing.
+
+<br />
 
 ### Running Tests
 
@@ -378,12 +495,16 @@ cargo test --test integration_tests
 cargo test --all-features
 ```
 
+<br />
+
 ### Test Coverage
 
 - **58 total tests** covering all functionality
 - **18 unit tests** - Core logic, patterns, configuration
 - **36 integration tests** - Real-world scenarios, edge cases
 - **4 doc tests** - Documentation examples
+
+<br />
 
 **What's tested:**
 - ✅ All citation formats (numeric, named, reference links)
@@ -394,24 +515,41 @@ cargo test --all-features
 - ✅ Configuration variations
 - ✅ Markdown preservation (formatting, links, images)
 
+<br />
+
 ### Understanding Test Output
 
 When running `cargo bench`, you'll see tests marked as "ignored" - **this is normal**. Rust automatically skips regular tests during benchmarking to avoid timing interference. All tests pass when running `cargo test`.
 
+<br />
+
+---
+
 ## 🔧 Troubleshooting
+
+<br />
 
 ### Common Issues
 
+<br />
+
 **Q: Why do tests show as "ignored" when running `cargo bench`?**
+
 A: This is normal Rust behavior. When running benchmarks, regular tests are automatically skipped to avoid interfering with timing measurements. All tests pass when you run `cargo test`. See [BENCHMARKING.md](docs/performance/BENCHMARKING.md) for details.
 
+<br />
+
 **Q: What does "Gnuplot not found, using plotters backend" mean?**
+
 A: This is just an informational message. Criterion (the benchmarking library) can use Gnuplot for visualization, but falls back to an alternative plotting backend if it's not installed. Benchmarks still run correctly. To install Gnuplot:
 - macOS: `brew install gnuplot`
 - Ubuntu/Debian: `sudo apt-get install gnuplot`
 - Windows: Download from http://www.gnuplot.info/
 
+<br />
+
 **Q: Why are there performance outliers in benchmarks?**
+
 A: Outliers (typically 3-13% of measurements) are normal due to:
 - Operating system scheduling
 - CPU frequency scaling
@@ -420,8 +558,12 @@ A: Outliers (typically 3-13% of measurements) are normal due to:
 
 This is expected and doesn't indicate a problem. Criterion automatically detects and reports outliers.
 
+<br />
+
 **Q: The CLI tool isn't found after installation**
+
 A: Make sure Cargo's bin directory is in your PATH:
+
 ```bash
 # Add to ~/.bashrc, ~/.zshrc, or equivalent
 export PATH="$HOME/.cargo/bin:$PATH"
@@ -430,23 +572,35 @@ export PATH="$HOME/.cargo/bin:$PATH"
 source ~/.bashrc  # or source ~/.zshrc
 ```
 
+<br />
+
 **Q: How do I know if citations were actually removed?**
+
 A: Use the `--verbose` flag to see before/after sizes:
+
 ```bash
 md-cite-clean input.md -o output.md --verbose
 ```
 
+<br />
+
 ### Getting Help
 
-- **Issues**: Report bugs or request features on GitHub
+- **Issues**: Report bugs or request features on [GitHub](https://github.com/opensite-ai/markdown-ai-cite-remove/issues)
 - **Documentation**: Run `cargo doc --open` for full API docs
 - **Examples**: Check the `examples/` directory for working code
+
+<br />
+
+---
 
 ## 🤝 Contributing
 
 Built by [OpenSite AI](https://opensite.ai) for the developer community.
 
 Contributions welcome! Please feel free to submit a Pull Request.
+
+<br />
 
 ### Development Setup
 
@@ -470,6 +624,10 @@ cargo fmt
 # Run linter
 cargo clippy
 ```
+
+<br />
+
+---
 
 ## 📄 License
 
