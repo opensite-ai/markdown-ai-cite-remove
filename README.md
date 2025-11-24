@@ -1,4 +1,6 @@
-# 🧹 markdown-ai-cite-remove
+![rust-markdown-ai-cite-remove-banner](https://github.com/user-attachments/assets/4c434a97-88de-4aea-9471-c96d4357f0c9)
+
+# Rust Crate: Markdown AI Citation Removal
 
 [![Crates.io](https://img.shields.io/crates/v/markdown-ai-cite-remove.svg)](https://crates.io/crates/markdown-ai-cite-remove)
 [![Documentation](https://docs.rs/markdown-ai-cite-remove/badge.svg)](https://docs.rs/markdown-ai-cite-remove)
@@ -7,11 +9,11 @@
 
 > *"Five years of AI evolution and flirting with AGI. Zero libraries to remove `[1][2][3]` from markdown 🙄. Remember me well when they take over."*
 
-**Remove AI-generated citations and annotations from Markdown text**
+**Remove AI-generated citations and annotations from Markdown text at the speed of Rust**
 
 High-performance Rust library for cleaning ChatGPT, Claude, Perplexity, and other AI markdown responses. Removes inline citations `[1][2]`, reference links `[1]: https://...`, and bibliography sections with 100% accuracy.
 
-> 📚 **New!** Comprehensive documentation added: [CLI Guide](docs/guides/CLI_GUIDE.md) • [Benchmarking Guide](docs/performance/BENCHMARKING.md) • [FAQ](docs/guides/FAQ.md) • [Documentation Index](docs/DOCUMENTATION_INDEX.md)
+> 📚 [CLI Guide](docs/guides/CLI_GUIDE.md) • [Benchmarking Guide](docs/performance/BENCHMARKING.md) • [FAQ](docs/guides/FAQ.md) • [Documentation Index](docs/DOCUMENTATION_INDEX.md)
 
 ## ⚡ Performance-First
 
