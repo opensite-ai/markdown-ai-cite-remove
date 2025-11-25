@@ -14,24 +14,24 @@ Complete guide for using the `md-cite-remove` command-line tool.
 
 ```bash
 # Option 1: Install from crates.io (when published)
-cargo install markdown-ai-cite-remove --features cli
+cargo install markdown-ai-cite-remove
 
 # Option 2: Install from local source
 cd /path/to/markdown-ai-cite-remove
-cargo install --path . --features cli
+cargo install --path .
 
 # Option 3: Build without installing
-cargo build --release --features cli
-# Binary will be at: target/release/md-cite-remove
+cargo build --release
+# Binary will be at: target/release/mdcr
 ```
 
 ### Verify Installation
 
 ```bash
-md-cite-remove --version
-# Should output: md-cite-remove 0.1.0
+mdcr --version
+# Should output: mdcr 0.2.3
 
-md-cite-remove --help
+mdcr --help
 # Shows usage information
 ```
 
@@ -55,128 +55,162 @@ Perfect for piping and command chaining:
 
 ```bash
 # Simple pipe
-echo "Text[1] with citations[2]." | md-cite-remove
+echo "Text[1] with citations[2]." | mdcr
 # Output: Text with citations.
 
 # From file to stdout
-cat document.md | md-cite-remove
+cat document.md | mdcr
 
 # Chain with other commands
-cat document.md | md-cite-remove | wc -w
+cat document.md | mdcr | wc -w
 ```
 
-### 2. Process a File
+### 2. Process a File (Auto-Generated Output)
+
+The easiest way - just provide the input file:
 
 ```bash
-# Read file, output to stdout
-md-cite-remove document.md
+# Auto-generate output file with __cite_removed suffix
+mdcr ai_response.md
+# Creates: ai_response__cite_removed.md
 
-# Read file, save to another file
-md-cite-remove input.md -o output.md
-md-cite-remove input.md --output output.md  # Long form
+mdcr chatgpt_output.md
+# Creates: chatgpt_output__cite_removed.md
 ```
 
-### 3. Verbose Mode
+### 3. Process a File (Custom Output)
+
+Specify a custom output filename:
+
+```bash
+# Read file, save to specific file
+mdcr input.md -o output.md
+mdcr input.md --output output.md  # Long form
+```
+
+### 4. Verbose Mode
 
 See what's happening:
 
 ```bash
-md-cite-remove input.md -o output.md --verbose
+mdcr input.md --verbose
 # Output:
 # Reading from file: input.md
-# Cleaning markdown (input size: 1234 bytes)...
-# Cleaned markdown (output size: 1100 bytes)
-# Writing to file: output.md
+# Removing citations (input size: 1234 bytes)...
+# Citations removed (output size: 1100 bytes)
+# Writing to file: input__cite_removed.md
 # Done!
 ```
 
-## Advanced Usage
+## Common Workflows
 
-### Batch Processing
+### File Processing
 
-**Process all markdown files in a directory:**
+**1. Single file (auto-generated output):**
 
 ```bash
-# Using a for loop
+mdcr document.md
+# Creates: document__cite_removed.md
+```
+
+**2. Single file (custom output):**
+
+```bash
+mdcr document.md -o clean_document.md
+```
+
+**3. Multiple files (auto-generated outputs):**
+
+```bash
+# Process all markdown files - easiest way!
 for file in *.md; do
-  md-cite-remove "$file" -o "cleaned_${file}"
+  mdcr "$file"
+done
+# Creates: file1__cite_removed.md, file2__cite_removed.md, etc.
+```
+
+**4. Multiple files (custom naming):**
+
+```bash
+# Process with custom output names
+for file in *.md; do
+  mdcr "$file" -o "cleaned_${file}"
 done
 
-# Using find
-find . -name "*.md" -exec md-cite-remove {} -o {}.clean \;
-
-# Process and preserve directory structure
-find ./input -name "*.md" | while read file; do
-  output="${file/input/output}"
-  mkdir -p "$(dirname "$output")"
-  md-cite-remove "$file" -o "$output"
+# Process files in a directory
+for file in ./docs/*.md; do
+  filename=$(basename "$file")
+  mdcr "$file" -o "./cleaned/$filename"
 done
 ```
 
-**Batch script example:**
+### In-Place Editing
+
+**1. In-place cleaning (overwrites original):**
 
 ```bash
-#!/bin/bash
-# clean_all.sh - Remove citations from all markdown files
+# Using temporary file
+mdcr input.md -o temp.md && mv temp.md input.md
 
-INPUT_DIR="./ai_output"
-OUTPUT_DIR="./cleaned"
-
-mkdir -p "$OUTPUT_DIR"
-
-count=0
-for file in "$INPUT_DIR"/*.md; do
-  if [ -f "$file" ]; then
-    filename=$(basename "$file")
-    md-cite-remove "$file" -o "$OUTPUT_DIR/$filename" --verbose
-    ((count++))
-  fi
+# In a loop
+for file in *.md; do
+  mdcr "$file" -o "$file.tmp"
+  mv "$file.tmp" "$file"
 done
+```
 
-echo "Processed $count files"
+**2. Backup before cleaning:**
+
+```bash
+# Create backup then clean
+cp document.md document.md.backup
+mdcr document.md -o document.md.tmp && mv document.md.tmp document.md
 ```
 
 ### Integration with Other Tools
 
-**1. With Pandoc (convert to HTML/PDF):**
+**1. With find (auto-generated outputs):**
 
 ```bash
-# Remove citations from and convert to HTML
-md-cite-remove input.md | pandoc -f markdown -t html -o output.html
-
-# Remove citations from and convert to PDF
-md-cite-remove input.md | pandoc -f markdown -o output.pdf
+# Process all .md files recursively - simple!
+find . -name "*.md" -exec mdcr {} \;
+# Creates files with __cite_removed suffix in same directories
 ```
 
-**2. With curl (process API responses):**
+**2. With find (custom outputs):**
 
 ```bash
-# Remove citations from AI API response
-curl -s https://api.example.com/ai-response | md-cite-remove
-
-# Save cleaned response
-curl -s https://api.example.com/ai-response | md-cite-remove > cleaned.md
+# Process and preserve directory structure
+find ./input -name "*.md" | while read file; do
+  output="${file/input/output}"
+  mkdir -p "$(dirname "$output")"
+  mdcr "$file" -o "$output"
+done
 ```
 
-**3. With grep/sed (text processing):**
+**3. With xargs:**
 
 ```bash
-# Remove citations from and search
-md-cite-remove document.md | grep "important"
-
-# Remove citations from and count lines
-md-cite-remove document.md | wc -l
-
-# Remove citations from and preview
-md-cite-remove document.md | less
+# Process files in parallel (if xargs supports -P)
+find . -name "*.md" | xargs -P 4 -I {} mdcr {} -o {}.clean
 ```
 
-**4. With git (version control):**
+**4. With other commands:**
+
+```bash
+# Remove citations and count lines
+mdcr document.md -o - | wc -l
+
+# Remove citations and preview
+mdcr document.md -o - | less
+```
+
+**5. With git (version control):**
 
 ```bash
 # Remove citations from all changed markdown files
 git diff --name-only | grep '\.md$' | while read file; do
-  md-cite-remove "$file" -o "$file.tmp" && mv "$file.tmp" "$file"
+  mdcr "$file" -o "$file.tmp" && mv "$file.tmp" "$file"
 done
 ```
 
@@ -186,7 +220,7 @@ done
 
 ```bash
 #!/bin/bash
-# watch_and_clean.sh - Auto-clean new files
+# watch_and_clean.sh - Auto-clean new files with custom output directory
 
 INPUT_DIR="./ai_output"
 OUTPUT_DIR="./cleaned"
@@ -197,12 +231,25 @@ mkdir -p "$OUTPUT_DIR"
 fswatch -0 "$INPUT_DIR" | while read -d "" event; do
   if [[ "$event" == *.md ]]; then
     filename=$(basename "$event")
-    md-cite-remove "$event" -o "$OUTPUT_DIR/$filename" --verbose
+    mdcr "$event" -o "$OUTPUT_DIR/$filename" --verbose
   fi
 done
 ```
 
-**2. Pre-commit hook:**
+**2. Batch processing with custom naming pattern:**
+
+```bash
+#!/bin/bash
+# batch_clean.sh - Process files with timestamp in output name
+
+for file in ./ai_output/*.md; do
+  filename=$(basename "$file" .md)
+  timestamp=$(date +%Y%m%d_%H%M%S)
+  mdcr "$file" -o "./cleaned/${filename}_cleaned_${timestamp}.md"
+done
+```
+
+**3. Pre-commit hook:**
 
 ```bash
 #!/bin/bash
@@ -210,14 +257,14 @@ done
 
 for file in $(git diff --cached --name-only | grep '\.md$'); do
   if [ -f "$file" ]; then
-    md-cite-remove "$file" -o "$file.tmp"
+    mdcr "$file" -o "$file.tmp"
     mv "$file.tmp" "$file"
     git add "$file"
   fi
 done
 ```
 
-**3. CI/CD pipeline:**
+**4. CI/CD pipeline:**
 
 ```yaml
 # .github/workflows/clean-docs.yml
@@ -239,23 +286,40 @@ jobs:
         with:
           toolchain: stable
       
-      - name: Install md-cite-remove
-        run: cargo install markdown-ai-cite-remove --features cli
-      
+      - name: Install mdcr
+        run: cargo install markdown-ai-cite-remove
+
       - name: Remove citations from markdown files
         run: |
           find docs -name "*.md" | while read file; do
-            md-cite-remove "$file" -o "$file.tmp"
+            mdcr "$file" -o "$file.tmp"
             mv "$file.tmp" "$file"
           done
-      
+
       - name: Commit changes
         run: |
           git config user.name "Bot"
           git config user.email "bot@example.com"
           git add docs/
-          git commit -m "Remove citations from citations from docs" || true
+          git commit -m "Remove citations from docs" || true
           git push
+```
+
+**5. Conditional processing based on file content:**
+
+```bash
+#!/bin/bash
+# smart_clean.sh - Only process files that contain citations
+
+for file in *.md; do
+  # Check if file contains citations
+  if grep -q '\[[0-9]\+\]' "$file"; then
+    echo "Processing $file (contains citations)"
+    mdcr "$file" --verbose
+  else
+    echo "Skipping $file (no citations found)"
+  fi
+done
 ```
 
 ## Use Cases
@@ -263,26 +327,33 @@ jobs:
 ### 1. Blog Publishing
 
 ```bash
-# Remove citations from AI-generated blog post
-md-cite-remove ai_draft.md -o blog_post.md
+# Remove citations from AI-generated blog post (auto-output)
+mdcr ai_draft.md
+# Creates: ai_draft__cite_removed.md
 
-# Remove citations from and publish
-md-cite-remove ai_draft.md | ./publish_to_cms.sh
+# Remove citations and publish directly
+mdcr ai_draft.md -o - | ./publish_to_cms.sh
 ```
 
 ### 2. Documentation Generation
 
 ```bash
 # Remove citations from AI-generated docs
-md-cite-remove ai_docs.md -o README.md --verbose
+mdcr ai_docs.md -o README.md --verbose
 ```
 
 ### 3. Content Aggregation
 
 ```bash
-# Remove citations from multiple AI responses
+# Remove citations from multiple AI responses (auto-output)
 for source in chatgpt claude perplexity; do
-  md-cite-remove "${source}_response.md" -o "cleaned_${source}.md"
+  mdcr "${source}_response.md"
+done
+# Creates: chatgpt_response__cite_removed.md, etc.
+
+# Or with custom naming
+for source in chatgpt claude perplexity; do
+  mdcr "${source}_response.md" -o "cleaned_${source}.md"
 done
 
 # Combine cleaned responses
@@ -293,10 +364,11 @@ cat cleaned_*.md > combined.md
 
 ```bash
 # Remove citations from research summary
-md-cite-remove research_summary.md -o clean_summary.md
+mdcr research_summary.md
+# Creates: research_summary__cite_removed.md
 
 # Verify citations removed
-diff research_summary.md clean_summary.md
+diff research_summary.md research_summary__cite_removed.md
 ```
 
 ## Tips and Tricks
@@ -305,28 +377,28 @@ diff research_summary.md clean_summary.md
 
 ```bash
 # Process large files efficiently (already optimized)
-md-cite-remove large_file.md -o output.md
+mdcr large_file.md
 
 # Batch process with parallel (if installed)
-ls *.md | parallel md-cite-remove {} -o cleaned_{}
+ls *.md | parallel mdcr {}
 ```
 
 ### Debugging
 
 ```bash
 # See what changed
-md-cite-remove input.md -o output.md --verbose
-diff input.md output.md
+mdcr input.md --verbose
+diff input.md input__cite_removed.md
 
 # Check file sizes
-ls -lh input.md output.md
+ls -lh input.md input__cite_removed.md
 ```
 
 ### Validation
 
 ```bash
 # Ensure no citations remain
-if md-cite-remove input.md | grep -q '\[[0-9]\+\]'; then
+if mdcr input.md -o - | grep -q '\[[0-9]\+\]'; then
   echo "Warning: Citations still present!"
 else
   echo "All citations removed successfully"
@@ -340,7 +412,7 @@ fi
 **Solution:**
 ```bash
 # Check if installed
-which md-cite-remove
+which mdcr
 
 # If not found, add to PATH
 export PATH="$HOME/.cargo/bin:$PATH"
@@ -351,19 +423,23 @@ export PATH="$HOME/.cargo/bin:$PATH"
 **Solution:**
 ```bash
 # Make binary executable
-chmod +x ~/.cargo/bin/md-cite-remove
+chmod +x ~/.cargo/bin/mdcr
 
 # Or reinstall
-cargo install --path . --features cli --force
+cargo install --path . --force
 ```
 
-### Issue: Output file same as input
+### Issue: Want to overwrite input file
 
 **Solution:**
 ```bash
 # Use temporary file
-md-cite-remove input.md -o input.md.tmp
+mdcr input.md -o input.md.tmp
 mv input.md.tmp input.md
+
+# Or use the auto-generated file and rename
+mdcr input.md
+mv input__cite_removed.md input.md
 
 # Or use in-place script
 md-cite-remove input.md -o temp && mv temp input.md

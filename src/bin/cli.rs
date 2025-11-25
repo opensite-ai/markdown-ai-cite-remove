@@ -2,9 +2,10 @@ use clap::Parser;
 use markdown_ai_cite_remove::remove_citations;
 use std::fs;
 use std::io::{self, Read, Write};
+use std::path::Path;
 
 #[derive(Parser)]
-#[command(name = "md-cite-remove")]
+#[command(name = "mdcr")]
 #[command(version, about = "Remove citations from AI-generated markdown", long_about = None)]
 struct Cli {
     /// Input file (or stdin if not specified)
@@ -23,12 +24,13 @@ fn main() -> io::Result<()> {
     let cli = Cli::parse();
 
     // Read input
-    let input = match cli.input {
+    let (input, input_path) = match cli.input {
         Some(path) => {
             if cli.verbose {
                 eprintln!("Reading from file: {}", path);
             }
-            fs::read_to_string(&path)?
+            let content = fs::read_to_string(&path)?;
+            (content, Some(path))
         }
         None => {
             if cli.verbose {
@@ -36,7 +38,7 @@ fn main() -> io::Result<()> {
             }
             let mut buffer = String::new();
             io::stdin().read_to_string(&mut buffer)?;
-            buffer
+            (buffer, None)
         }
     };
 
@@ -50,8 +52,25 @@ fn main() -> io::Result<()> {
         eprintln!("Citations removed (output size: {} bytes)", result.len());
     }
 
+    // Determine output path
+    let output_path = match cli.output {
+        Some(path) => Some(path),
+        None => {
+            // If input was a file and no output specified, auto-generate output filename
+            input_path.map(|input| {
+                let path = Path::new(&input);
+                let stem = path
+                    .file_stem()
+                    .and_then(|s| s.to_str())
+                    .unwrap_or("output");
+                let ext = path.extension().and_then(|s| s.to_str()).unwrap_or("md");
+                format!("{}__cite_removed.{}", stem, ext)
+            })
+        }
+    };
+
     // Write output
-    match cli.output {
+    match output_path {
         Some(path) => {
             if cli.verbose {
                 eprintln!("Writing to file: {}", path);

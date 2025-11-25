@@ -1,8 +1,64 @@
-# Changelog - v0.2.1
+# Changelog
 
-## 🐛 Bug Fix Release: Perplexity Citation Format Support
+All notable changes to this project will be documented in this file.
 
-**Release Date**: 2025-01-24  
+---
+
+## [0.3.0] - 2025-01-16
+
+### 🎉 Major CLI Improvements
+
+This release focuses on making the CLI tool significantly easier to use based on user feedback.
+
+### Added
+
+- **Shorter CLI command name**: `mdcr` (while keeping `md-cite-remove` for backward compatibility)
+  - Much easier to remember and type
+  - Reduces friction for daily use
+  - Both commands work identically
+
+- **Auto-generated output filenames**: When no `-o` flag is provided, automatically creates output file with `__cite_removed` suffix
+  - Example: `mdcr ai_response.md` creates `ai_response__cite_removed.md`
+  - Eliminates the need to specify output filename for simple use cases
+  - Preserves file extension automatically
+  - Still supports `-o` flag for custom output filenames
+
+### Changed
+
+- **Simplified CLI workflow**: Users can now simply run `mdcr filename.md` instead of `mdcr filename.md -o output.md`
+- **Updated all documentation** to use the new `mdcr` command as the primary example
+- **Enhanced shell script examples** in CLI_GUIDE.md to show more advanced automation patterns
+
+### Migration Guide
+
+**Old workflow:**
+```bash
+md-cite-remove input.md -o output.md
+```
+
+**New workflow (recommended):**
+```bash
+mdcr input.md
+# Creates: input__cite_removed.md
+```
+
+**Custom output (still supported):**
+```bash
+mdcr input.md -o custom_name.md
+```
+
+**Backward compatibility:**
+```bash
+# Old command still works!
+md-cite-remove input.md -o output.md
+```
+
+---
+
+## [0.2.1] - 2025-01-24
+
+### 🐛 Bug Fix Release: Perplexity Citation Format Support
+
 **Version**: 0.2.1 (Bug Fix)
 
 ---
@@ -363,7 +419,12 @@ cargo install markdown-ai-cite-remove
 
 ### CLI Usage
 ```bash
-echo "Text[1] with citations[2]." | md-cite-remove
+# Simple usage with auto-generated output
+mdcr ai_response.md
+# Creates: ai_response__cite_removed.md
+
+# Or pipe from stdin
+echo "Text[1] with citations[2]." | mdcr
 ```
 
 ### Library Usage

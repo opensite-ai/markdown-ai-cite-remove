@@ -20,15 +20,15 @@ rustup update stable
 
 ```bash
 # From crates.io (when published)
-cargo install markdown-ai-cite-remove --features cli
+cargo install markdown-ai-cite-remove
 
 # From source
 git clone https://github.com/opensite-ai/markdown-ai-cite-remove.git
 cd markdown-ai-cite-remove
-cargo install --path . --features cli
+cargo install --path .
 ```
 
-### Q: The `md-cite-remove` command isn't found after installation
+### Q: The `mdcr` command isn't found after installation
 
 **A:** Add Cargo's bin directory to your PATH:
 
@@ -120,19 +120,28 @@ The reports include:
 
 ## Usage
 
+### Q: How do I process a file with auto-generated output?
+
+**A:** Just provide the input filename:
+
+```bash
+mdcr ai_response.md
+# Creates: ai_response__cite_removed.md
+```
+
 ### Q: How do I clean a file in-place?
 
 **A:** Use a temporary file:
 
 ```bash
-md-cite-remove input.md -o temp.md && mv temp.md input.md
+mdcr input.md -o temp.md && mv temp.md input.md
 ```
 
 Or in a script:
 ```bash
 #!/bin/bash
 for file in *.md; do
-  md-cite-remove "$file" -o "$file.tmp"
+  mdcr "$file" -o "$file.tmp"
   mv "$file.tmp" "$file"
 done
 ```
@@ -142,19 +151,24 @@ done
 **A:** Yes, several ways:
 
 ```bash
-# Loop
+# Auto-generated outputs (easiest!)
 for file in *.md; do
-  md-cite-remove "$file" -o "cleaned_${file}"
+  mdcr "$file"
+done
+
+# Custom naming
+for file in *.md; do
+  mdcr "$file" -o "cleaned_${file}"
 done
 
 # Find
-find . -name "*.md" -exec md-cite-remove {} -o {}.clean \;
+find . -name "*.md" -exec mdcr {} \;
 
 # Parallel (if installed)
-ls *.md | parallel md-cite-remove {} -o cleaned_{}
+ls *.md | parallel mdcr {}
 ```
 
-See [CLI_GUIDE.md](CLI_GUIDE.md) (this file) for more examples.
+See [CLI_GUIDE.md](CLI_GUIDE.md) for more examples.
 
 ### Q: Does it work with stdin/stdout?
 
@@ -162,13 +176,13 @@ See [CLI_GUIDE.md](CLI_GUIDE.md) (this file) for more examples.
 
 ```bash
 # From stdin
-echo "Text[1] here." | md-cite-remove
+echo "Text[1] here." | mdcr
 
 # Pipe from file
-cat document.md | md-cite-remove
+cat document.md | mdcr
 
 # Chain commands
-cat document.md | md-cite-remove | pandoc -f markdown -t html
+cat document.md | mdcr | pandoc -f markdown -t html
 ```
 
 ### Q: How do I verify citations were removed?
@@ -176,12 +190,12 @@ cat document.md | md-cite-remove | pandoc -f markdown -t html
 **A:** Use verbose mode:
 
 ```bash
-md-cite-remove input.md -o output.md --verbose
+mdcr input.md --verbose
 ```
 
 This shows input/output sizes. Or compare files:
 ```bash
-diff input.md output.md
+diff input.md input__cite_removed.md
 ```
 
 ## Library Usage

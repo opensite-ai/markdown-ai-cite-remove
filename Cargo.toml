@@ -1,6 +1,6 @@
 [package]
 name = "markdown-ai-cite-remove"
-version = "0.2.2"
+version = "0.3.0"
 edition = "2021"
 rust-version = "1.70"
 authors = ["OpenSite AI <dev@opensite.ai>"]
@@ -33,6 +33,12 @@ harness = false
 default = ["cli"]
 cli = ["clap"]
 
+[[bin]]
+name = "mdcr"
+path = "src/bin/cli.rs"
+required-features = ["cli"]
+
+# Keep old name for backward compatibility
 [[bin]]
 name = "md-cite-remove"
 path = "src/bin/cli.rs"

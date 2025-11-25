@@ -106,11 +106,12 @@ async fn process_stream(stream: impl Stream<Item = String>) {
 
 <br />
 
-#### **5. Batch File Processing (CLI)**
+#### **5. Simple File Processing (CLI)**
 
 ```bash
-# Remove citations from all markdown files in a directory
-find ./ai_output -name "*.md" -exec md-cite-remove {} -o ./cleaned/{} \;
+# Remove citations and auto-generate output file
+mdcr ai_response.md
+# Creates: ai_response__cite_removed.md
 ```
 
 <br />
@@ -166,16 +167,16 @@ Install the command-line tool globally:
 
 ```bash
 # Install from crates.io (when published)
-cargo install markdown-ai-cite-remove --features cli
+cargo install markdown-ai-cite-remove
 
 # Or install from local source
-cargo install --path . --features cli
+cargo install --path .
 ```
 
 Verify installation:
 
 ```bash
-md-cite-remove --version
+mdcr --version
 ```
 
 <br />
@@ -190,10 +191,10 @@ md-cite-remove --version
 
 | Task | Command |
 |------|---------|
-| Remove citations from from stdin | `echo "Text[1]" \| md-cite-remove` |
-| Remove citations from a file | `md-cite-remove input.md` |
-| Save to file | `md-cite-remove input.md -o output.md` |
-| Verbose output | `md-cite-remove input.md -o output.md --verbose` |
+| Remove citations from stdin | `echo "Text[1]" \| mdcr` |
+| Auto-generate output file | `mdcr input.md` |
+| Specify output file | `mdcr input.md -o output.md` |
+| Verbose output | `mdcr input.md --verbose` |
 | Run tests | `cargo test` |
 | Run benchmarks | `cargo bench` |
 | View docs | `cargo doc --open` |
@@ -221,37 +222,38 @@ assert_eq!(cleaned.trim(), "AI research shows promise.");
 **1. Process from stdin to stdout (pipe mode):**
 
 ```bash
-echo "Text[1] here." | md-cite-remove
+echo "Text[1] here." | mdcr
 # Output: Text here.
 ```
 
 <br />
 
-**2. Remove citations from a file and print to stdout:**
+**2. Auto-generate output file (easiest!):**
 
 ```bash
-md-cite-remove document.md
+mdcr ai_response.md
+# Creates: ai_response__cite_removed.md
 ```
 
 <br />
 
-**3. Remove citations from a file and save to another file:**
+**3. Specify custom output file:**
 
 ```bash
-md-cite-remove input.md -o output.md
+mdcr input.md -o output.md
 ```
 
 <br />
 
-**4. Remove citations from with verbose output (shows processing details):**
+**4. Verbose output (shows processing details):**
 
 ```bash
-md-cite-remove input.md -o output.md --verbose
+mdcr input.md --verbose
 # Output:
 # Reading from file: input.md
-# Cleaning markdown (input size: 1234 bytes)...
-# Cleaned markdown (output size: 1100 bytes)
-# Writing to file: output.md
+# Removing citations (input size: 1234 bytes)...
+# Citations removed (output size: 1100 bytes)
+# Writing to file: input__cite_removed.md
 # Done!
 ```
 
@@ -260,13 +262,14 @@ md-cite-remove input.md -o output.md --verbose
 
 #### Advanced CLI Usage
 
-**Process multiple files:**
+**Process multiple files (auto-generated output):**
 
 ```bash
-# Using a loop
+# Process all markdown files in current directory
 for file in *.md; do
-  md-cite-remove "$file" -o "cleaned_${file}"
+  mdcr "$file"
 done
+# Creates: file1__cite_removed.md, file2__cite_removed.md, etc.
 ```
 
 <br />
@@ -275,38 +278,27 @@ done
 
 ```bash
 # Remove citations from AI output from curl
-curl https://api.example.com/ai-response | md-cite-remove
+curl https://api.example.com/ai-response | mdcr
 
-# Remove citations from and preview
-md-cite-remove document.md | less
+# Remove citations and preview
+mdcr document.md -o - | less
 
-# Remove citations from and count words
-md-cite-remove document.md | wc -w
+# Remove citations and count words
+mdcr document.md -o - | wc -w
 
 # Chain with other markdown processors
-md-cite-remove input.md | pandoc -f markdown -t html -o output.html
+mdcr input.md -o - | pandoc -f markdown -t html -o output.html
 ```
 
 <br />
 
-**Using in scripts:**
+**Advanced shell script example:**
 
-```bash
-#!/bin/bash
-# clean_ai_docs.sh - Remove citations from all AI-generated markdown files
-
-INPUT_DIR="./ai_output"
-OUTPUT_DIR="./cleaned"
-
-mkdir -p "$OUTPUT_DIR"
-
-for file in "$INPUT_DIR"/*.md; do
-  filename=$(basename "$file")
-  md-cite-remove "$file" -o "$OUTPUT_DIR/$filename" --verbose
-done
-
-echo "Cleaned $(ls -1 "$INPUT_DIR"/*.md | wc -l) files"
-```
+For more complex workflows, create a custom shell script. See the [CLI Guide](docs/guides/CLI_GUIDE.md) for advanced automation examples including:
+- Batch processing with custom naming
+- Directory watching and auto-processing
+- Git pre-commit hooks
+- CI/CD integration
 
 <br />
 
@@ -579,7 +571,7 @@ source ~/.bashrc  # or source ~/.zshrc
 A: Use the `--verbose` flag to see before/after sizes:
 
 ```bash
-md-cite-remove input.md -o output.md --verbose
+mdcr input.md --verbose
 ```
 
 <br />
